@@ -3,14 +3,16 @@
 	$db = mysqli_connect("localhost","jb","5banden","maildb");
 
 	// Tjekker om en bruger er logget ind og returnerer true/false
+	$u = 0;
 	function access($d = NULL){
+		global $u;
 		if(empty($_SESSION['user'])){
 			return false;
 		}
 		else{
+			$u = $_SESSION['user'];
 			if($d != NULL){
 				// Tjekker adgang til de domæne
-				$u = $_SESSION['user'];
 				if(mysqli_num_rows(mysqli_query($db, "SELECT * FROM con WHERE uID=$u AND $dID=$d")) > 0){
 					return true;
 				}
