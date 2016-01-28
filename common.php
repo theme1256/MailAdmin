@@ -39,4 +39,16 @@
 			$m = rens($_GET['mail']);
 		}
 	}
+
+	// Password-stuff
+	function haash($p, $s = NULL){
+		$cost = 10;
+		if($s == NULL){
+			$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
+			$salt = sprintf("$2a$%02d$", $cost) . $salt;
+		else{
+			$salt = $s;
+		}
+		return crypt($password, $salt);
+	}
 ?>
