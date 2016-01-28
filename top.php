@@ -19,9 +19,9 @@
 			<?php }?>
 		</div>
 <?php
-	/*if(!access()){
+	if(!access()){
 		// Der er ikke logget ind, vis login
 		include "login.php";
 		die();
-	}*/
+	}
 ?>
