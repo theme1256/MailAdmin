@@ -1,7 +1,5 @@
 RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
+RewriteRule ^admin/(.*)$ admin.php?u=$1
 RewriteRule ^domain/(.*)/mail/(.*)$ index.php?domain=$1&mail=$2
 RewriteRule ^domain/(.*)$ index.php?domain=$1
-RewriteRule ^admin/(.*)$ admin.php?u=$1
