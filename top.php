@@ -9,6 +9,7 @@
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
 		<meta http-equiv="Pragma" content="no-cache"/>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="style.css" type="text/css" media="all" />
 	</head>
 	<body>
 		<div class="header">
