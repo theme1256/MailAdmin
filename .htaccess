@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+RewriteRule ^domain/(.*)/mail/(.*)$ index.php?domain=$1&mail=$2
+RewriteRule ^domain/(.*)$ index.php?domain=$1
