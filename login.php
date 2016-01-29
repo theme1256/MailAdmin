@@ -1,9 +1,9 @@
 <h2>Du har måske ikke adgang her, log lige ind</h2>
 <form class="login">
 	Brugernavn:<br/>
-	<input type="text" name="u" placeholder="username"/><br/>
+	<input type="text" name="u" placeholder="username"/><label></label><br/>
 	Kodeord:<br/>
-	<input type="password" name="p" placeholder="password"/><br/>
+	<input type="password" name="p" placeholder="password"/><label></label><br/>
 	<button class="submit">Login</button>
 </form>
 <script type="text/javascript">
