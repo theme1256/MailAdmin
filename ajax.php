@@ -93,6 +93,37 @@
 			echo "Succes";
 		}
 	}
+	elseif($action == "editMe"){
+		// retter den bruger der er logget ind nu
+		$u = rens($_POST['u']);
+		$p = rens($_POST['p']);
+		$uID = $_SESSION['user'];
+		if(empty($u)){
+			echo "Fejl: Brugernavn er tomt.";
+			exit;
+		}
+		else{
+			$sql = "UPDATE login SET u='$u' WHERE uID=$uID";
+			if(!mysqli_query($db, $sql)){
+				mysqli_rollback($db);
+				echo "Fejl: SQL, opdatering af navn. $sql";
+				exit;
+			}
+		}
+		if(!empty($p)){
+			$p = haash($p);
+			$sql = "UPDATE login SET p='$p' WHERE uID=$uID";
+			if(!mysqli_query($db, $sql)){
+				mysqli_rollback($db);
+				echo "Fejl: SQL, opdatering af kode. $sql";
+				exit;
+			}
+		}
+		else{
+			mysqli_commit($db);
+			echo "Succes";
+		}
+	}
 	elseif($action == "login"){
 		// Tjek om de givne informationer stemmer overens med noget i DB
 		$u = rens($_POST['u']);

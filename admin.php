@@ -8,12 +8,13 @@
 			$U = rens($_GET['u']);
 			$r = mysqli_fetch_array(mysqli_query($db, "SELECT * FROM login WHERE u='$U'"));
 ?>
+<a href="/user" class="bach">Tilbage til liste</a>
 <h2>Ret bruger: <?php echo $r['u'];?></h2>
 <form class="admin">
 	Brugernavn:<br/>
-	<input type="text" name="u" value="<?php echo $r['u'];?>"/><br/>
+	<input type="text" name="u" value="<?php echo $r['u'];?>"/><label></label><br/>
 	Kodeord:<br/>
-	<input type="password" name="p" placeholder="En kode, intet nyt, intet ændres"/><br/>
+	<input type="password" name="p" placeholder="En kode, intet nyt, intet ændres"/><label></label><br/>
 	<br/>
 	<h3>Domæner:</h3>
 	Tomme felter bliver slettet.<br/><br/>
@@ -27,7 +28,7 @@
 		<select name="<?php echo $i; $i++;?>">
 			<option value="0">vælg en</option>
 			<?php while($Y = mysqli_fetch_array($Q)){?><option value="<?php echo $Y['pkid'];?>"<?php if($Y['pkid'] == $X['dID']){echo " selected=\"selected\"";}?>><?php echo $Y['domain'];?></option><?php }?>
-		</select><br/>
+		</select><label></label><br/>
 		<?php }?>
 	</div>
 	<button class="MOAR">Endnu et domæne</button><br/>
@@ -89,12 +90,13 @@
 			// Der skal oprettes en ny bruger
 			$q = mysqli_query($db, "SELECT * FROM domains ORDER BY domain ASC");
 ?>
+<a href="/user" class="bach">Tilbage til liste</a>
 <h2>Opret en bruger</h2>
 <form class="admin">
 	Brugernavn:<br/>
-	<input type="text" name="u" placeholder="Hvad som helst"/><br/>
+	<input type="text" name="u" placeholder="Hvad som helst"/><label></label><br/>
 	Kodeord:<br/>
-	<input type="password" name="p" placeholder="En kode"/><br/>
+	<input type="password" name="p" placeholder="En kode"/><label></label><br/>
 	<br/>
 	<h3>Domæner:</h3>
 	Tomme felter bliver slettet.<br/><br/>
@@ -103,7 +105,7 @@
 		<select name="1">
 			<option value="0">vælg en</option>
 			<?php while($r = mysqli_fetch_array($q)){?><option value="<?php echo $r['pkid'];?>"><?php echo $r['domain'];?></option><?php }?>
-		</select><br/>
+		</select><label></label><br/>
 	</div>
 	<button class="MOAR">Endnu et domæne</button><br/>
 	<button class="submit">Opret bruger</button>
@@ -161,12 +163,60 @@
 		}
 		else{
 			// Vis en liste med brugerer
+?>
+<h2>Brugerer</h2>
+<?php
+	$q = mysqli_query($db,"SELECT * FROM login ORDER BY u ASC");
+	while($r = mysqli_fetch_array($q)){
+?>
+<a href="/user/<?php echo $r['u'];?>"><?php echo $r['u'];?></a><br/>
+<?php }?>
+<br/>
+<a href="/user/new">Ny bruger</a>
+<?php
 		}
 	}
 	else{
 		// Ikke superadmin, vis info om selv
+		$r = mysqli_fetch_array(mysqli_query($db,"SELECT * FROM login WHERE uID=$u"));
 ?>
-Info om dig
+<h2>Info om dig</h2>
+<form class="admin">
+	Brugernavn:<br/>
+	<input type="text" name="u" value="<?php echo $r['u'];?>"/><label></label><br/>
+	Kodeord:<br/>
+	<input type="password" name="p" placeholder="En kode, intet nyt, intet ændres"/><label>Intet nyt = intet ændres</label><br/>
+	<br/>
+	<h3>Domæner du har adgang til:</h3>
+	<?php
+		$q = mysqli_query($db, "SELECT * FROM con INNER JOIN con.dID=domains.pkid WHERE uID=".$r['uID']);
+	?>
+	<div id="domains">
+		<?php
+			while($X = mysqli_fetch_array($q)){ $Q = mysqli_query($db, "SELECT * FROM domains ORDER BY domain ASC");
+				echo $X['domain']."<br/>";
+			}
+		?>
+	</div>
+	<button class="submit">Opdater bruger</button>
+</form>
+<script type="text/javascript">
+	$(function(){
+		$(".submit").click(function(e){
+			e.preventDefault();
+			var U = $("input[name='u']").val();
+			var P = $("input[name='p']").val();
+			$.post("/ajax.php", {action: "editMe", u: U, p: P}).done(function(r){
+				if(r == "Succes"){
+					setmsg("Opdatering lykkedes.", "succes");
+				}
+				else{
+					setmsg(r, "error");
+				}
+			});
+		});
+	});
+</script>
 <?php
 	}
 	
