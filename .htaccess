@@ -1,5 +1,6 @@
 RewriteEngine On
 
-RewriteRule ^admin/(.*)$ admin.php?u=$1
+RewriteRule ^user/(.*)$ admin.php?u=$1
+RewriteRule ^user$ admin.php
 RewriteRule ^domain/(.*)/mail/(.*)$ index.php?domain=$1&mail=$2
 RewriteRule ^domain/(.*)$ index.php?domain=$1
