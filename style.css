@@ -20,3 +20,5 @@ label{ width: 48%; margin: -35px 0 0 0; line-height: 35px; float: right; }
 .msg div{ padding: 5px; border-radius: 4px; }
 .error{ background-color: #FF7373; }
 .succes{ background-color: #8FFF73; }
+
+#mail, #list{ display: none; }

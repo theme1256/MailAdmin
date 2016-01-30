@@ -8,6 +8,19 @@
 ?>
 <a href="/domain/<?php echo $d;?>" class="bach">Tilbage til domæne</a>
 <h2>Opret ny mail til domæne: <?php echo $d;?></h2>
+<form class="mail">
+	Adresse:<br/>
+	<input type="text" name="m" placeholder="Det der står før @"/><label>Det der står før @<?php echo $d?></label><br/>
+	Dette er en:<br/>
+	<input type="radio" name="t" value="list"/>En maillingliste<br/>
+	<input type="radio" name="t" value="mail"/>En lokal mail<br/>
+	<div id="list">
+		
+	</div>
+	<div id="mail">
+		
+	</div>
+</form>
 <?php
 			}
 			else{
