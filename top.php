@@ -40,7 +40,7 @@
 		}
 
 		function Load(l){
-			location.href(l);
+			location.href = l;
 		}
 		</script>
 	</head>
