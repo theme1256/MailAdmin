@@ -3,11 +3,20 @@
 
 	if(!empty($d)){
 		if(!empty($m)){
-			// Vis info om den givne mail på det givne domæne
+			if($m == "new"){
+				// Opret en ny mail
 ?>
-<a href="/" class="bach">Tilbage til domæne</a>
+<a href="/domain/<?php echo $d;?>" class="bach">Tilbage til domæne</a>
+<h2>Opret ny mail til domæne: <?php echo $d;?></h2>
+<?php
+			}
+			else{
+				// Vis info om den givne mail på det givne domæne
+?>
+<a href="/domain/<?php echo $d;?>" class="bach">Tilbage til domæne</a>
 <h2>Info om mail: <?php echo $m;?></h2>
 <?php
+			}
 		}
 		else{
 			if($d == "new" && $u == 1){
@@ -89,9 +98,22 @@
 			else{
 				// Vis liste med mails der hører til det domæne
 ?>
-<a href="/" class="bach">Tilbage til domæneliste</a>
+<a href="/" class="bach">Tilbage til domæneoversigt</a>
 <h2>Mail til domæne: <?php echo $d;?></h2>
 <?php
+				$q = mysqli_query($db, "SELECT * FROM aliases WHERE mail LIKE '%@$d' ORDER BY mail ASC");
+				while($r = mysqli_fetch_array($q)){
+					if($r['mail'] == $r['destination']){
+						// Det er en lokal mail
+						echo "<a href=\"/domain/$d/mail/".$r['mail']."\">Lokal mail: ".$r['mail']."</a><br/>\n";
+					}
+					else{
+						// Det er nok en maillingsliste
+						echo "<a href=\"/domain/$d/mail/".$r['mail']."\">Mailliste: ".$r['mail']."</a><br/>\n";
+					}
+				}
+				echo "<br/>\n";
+				echo "<a href=\"/domain/$d/mail/new\">Opret ny mail/liste</a><br/>\n";
 			}
 		}
 	}
