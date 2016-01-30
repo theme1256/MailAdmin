@@ -13,6 +13,7 @@
 				// Vis form til at oprette et nyt domæne og bestemme hvilke brugere der skal have rettighed til det
 				$q = mysqli_query($db, "SELECT * FROM login ORDER BY u ASC");
 ?>
+<a href="/" class="bach">Tilbage til liste</a>
 <h2>Opret nyt domæne</h2>
 <form class="domain">
 	Domæne:<br/>
@@ -51,7 +52,7 @@
 			var i = 1;
 			var n = 1
 			var dom = "";
-			while(i <= D){
+			while(i <= B){
 				var y = $("select[name=\""+i+"\"]").val();
 				if(y > 0){
 					if(i > n)
@@ -62,6 +63,7 @@
 					n++;
 				i++;
 			}
+			console.log(dom);
 			$.post("/ajax.php", {action: "newDomain", d: D, b: B, bb: dom}).done(function(r){
 				if(r == "Succes"){
 					setmsg("Oprettelse lykkedes.", "succes");
@@ -97,13 +99,14 @@
 <h2>Domæner du er admin over</h2>
 Klik på en af dem for at blive vist informationer om mails på det domæne.<br/><br/>
 <?php
-		$q = mysqli_query($db, "SELECT * FROM con INNER JOIN domains ON con.dID=domains.pkid WHERE uID=$u");
+		$q = mysqli_query($db, "SELECT * FROM con INNER JOIN domains ON con.dID=domains.pkid WHERE uID=$u ORDER BY domain ASC");
 		while($r = mysqli_fetch_array($q)){
-			echo "<a href=\"/domain/".$r['domain']."\">".$r['domain']."</a><br/>";
+			echo "<a href=\"/domain/".$r['domain']."\">".$r['domain']."</a><br/>\n";
 		}
 		if($u == 1){
-			echo "<br/><a href=\"/domain/new\">Opret nyt domæne</a><br/>";
+			echo "<br/>\n<a href=\"/domain/new\">Opret nyt domæne</a><br/>\n";
 		}
+		echo "<br/>\n<a href=\"/user\">Ret i brugeroplysninger</a><br/>\n";
 	}
 
 	include "foot.php";
