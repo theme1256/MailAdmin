@@ -5,6 +5,7 @@
 		if(!empty($m)){
 			// Vis info om den givne mail på det givne domæne
 ?>
+<a href="/" class="bach">Tilbage til domæne</a>
 <h2>Info om mail: <?php echo $m;?></h2>
 <?php
 		}
@@ -88,6 +89,7 @@
 			else{
 				// Vis liste med mails der hører til det domæne
 ?>
+<a href="/" class="bach">Tilbage til domæneliste</a>
 <h2>Mail til domæne: <?php echo $d;?></h2>
 <?php
 			}
