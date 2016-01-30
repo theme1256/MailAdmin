@@ -150,6 +150,39 @@
 	}
 	elseif($action == "newDomain"){
 		// Opret et nyt domæne og giv de valgte brugere rettighed til det
+		$d = rens($_POST['d']);
+		$b = rens($_POST['b']);
+		$bb = rens($_POST['bb']);
+		if(empty($d)){
+			echo "Fejl: Der er ikke oplyst et domæne.";
+			exit;
+		}
+		// Opret domæne i DB
+		$sql = "INSERT INTO domains (domain) VALUES ('$d')";
+		if(!mysqli_query($db, $sql)){
+			mysqli_rollback($db);
+			echo "Fejl: SQL, indtastning af domæne. $sql";
+			exit;
+		}
+		$id = mysqli_insert_id($db);
+		//Giv brugere rettighedder
+		$v = "";
+		$V = explode(",", $bb);
+		foreach($V as $k => $val){
+			if($k > 0)
+				$v .= ",";
+			$v .= "('$id','$val')";
+		}
+		$sql = "INSERT INTO con (dID, uID) VALUES $v";
+		if(!mysqli_query($db, $sql)){
+			mysqli_rollback($db);
+			echo "Fejl: SQL, rettighedder til bruger. $sql";
+			exit;
+		}
+		else{
+			mysqli_commit($db);
+			echo "Succes";
+		}
 	}
 	elseif($action == "newMail"){
 		// Opret ny mail eller liste, tjek først om ting er tomme, derefter om det er en mail eller en liste
