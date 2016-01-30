@@ -148,7 +148,7 @@
 		<input type="text" name="p"/><label>Et kodeord, intet skrevet = intet ændres</label><br/>
 	</div>
 	<br/>
-	<button class="submit">Opret mail</button>
+	<button class="submit">Opdater mail</button>
 </form>
 <script type="text/javascript">
 	$(function(){
@@ -157,11 +157,13 @@
 			$("div#"+T).slideDown(400);
 			if(T == "mail"){
 				$("div#list").slideUp(400);
-				$("intput[name='m']").attr("disabled","disabled");
+				if($("input[name='u']").length > 0)
+					$("intput[name='m']").attr("disabled","disabled");
 			}
 			else{
 				$("div#mail").slideUp(400);
-				$("input[name='m']").removeAttr("disabled");
+				if($("input[name='u']").length > 0)
+					$("input[name='m']").removeAttr("disabled");
 			}
 		});
 		$(".MOAR").click(function(e){
