@@ -67,7 +67,7 @@
 			var n = 1
 			var dom = "";
 			while(i <= B){
-				var y = $("select[name=\""+i+"\"]").val();
+				var y = $("input[name=\""+i+"\"]").val();
 				if(y != ""){
 					if(i > n)
 						dom += ",";
@@ -77,7 +77,8 @@
 					n++;
 				i++;
 			}
-			$.post("/ajax.php", {action: "newMail", d: D, b: B, bb: dom, t: T, p: P}).done(function(r){
+			console.log(dom);
+			$.post("/ajax.php", {action: "newMail", m: M, b: B, bb: dom, t: T, p: P, d: "<?php echo $d;?>"}).done(function(r){
 				if(r == "Succes"){
 					setmsg("Oprettelse lykkedes.", "succes");
 					interval = setInterval(Load("/domain/<?php echo $d;?>"), 2500);
@@ -154,10 +155,14 @@
 		$("input[name='t']").change(function(){
 			var T = $(this).val();
 			$("div#"+T).slideDown(400);
-			if(T == "mail")
+			if(T == "mail"){
 				$("div#list").slideUp(400);
-			else
+				$("intput[name='m']").attr("disabled","disabled");
+			}
+			else{
 				$("div#mail").slideUp(400);
+				$("input[name='m']").removeAttr("disabled");
+			}
 		});
 		$(".MOAR").click(function(e){
 			e.preventDefault();
@@ -192,9 +197,9 @@
 					n++;
 				i++;
 			}
-			$.post("/ajax.php", {action: "editMail", d: D, b: B, bb: dom, t: T, p: P}).done(function(r){
+			$.post("/ajax.php", {action: "editMail", m: M, b: B, bb: dom, t: T, p: P, d: "<?php echo $d;?>", aID: aID, u: U}).done(function(r){
 				if(r == "Succes"){
-					setmsg("Oprettelse lykkedes.", "succes");
+					setmsg("Opdatering lykkedes.", "succes");
 					interval = setInterval(Load("/domain/<?php echo $d;?>"), 2500);
 				}
 				else{
@@ -289,7 +294,7 @@
 				// Vis liste med mails der hører til det domæne
 ?>
 <a href="/" class="bach">Tilbage til domæneoversigt</a>
-<h2>Mail til domæne: <?php echo $d;?></h2>
+<h2>Mails til domæne: <?php echo $d;?></h2>
 <?php
 				$q = mysqli_query($db, "SELECT * FROM aliases WHERE mail LIKE '%@$d' ORDER BY mail ASC");
 				while($r = mysqli_fetch_array($q)){
