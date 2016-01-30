@@ -10,7 +10,7 @@
 <h2>Opret ny mail til domæne: <?php echo $d;?></h2>
 <form class="mail">
 	Adresse:<br/>
-	<input type="text" name="m" placeholder="Det der står før @"/><label>Det der står før @<?php echo $d?></label><br/>
+	<input type="text" name="m" placeholder="Det der står før @"/><label>Det der står før @<?php echo $d?>, ingen ting er en catch-all mail, kræver at det er en liste.</label><br/>
 	Dette er en:<br/>
 	<input type="radio" name="t" value="list" id="LIST"/><label for="LIST" class="radio">En maillingliste</label><br/>
 	<input type="radio" name="t" value="mail" id="MAIL"/><label for="MAIL" class="radio">En lokal mail</label><br/>
@@ -94,9 +94,117 @@
 			}
 			else{
 				// Vis info om den givne mail på det givne domæne
+				$M = mysqli_fetch_array(mysqli_query($db, "SELECT * FROM aliases WHERE mail='$m'"));
 ?>
 <a href="/domain/<?php echo $d;?>" class="bach">Tilbage til domæne</a>
-<h2>Info om mail: <?php echo $m;?></h2>
+<h2>Info om <?php if($M['mail'] == $M['destination']){echo "mail: ";}else{echo "liste: ";} echo $m;?></h2>
+<form class="mail">
+	<input type="hidden" name="aID" value="<?php echo $M['pkid'];?>"/>
+	Adresse:<br/>
+	<input type="text" name="m" placeholder="Det der står før @" value="<?php echo str_replace("@".$d, "", $M['mail']);?>"/><label>Det der står før @<?php echo $d?>, ingen ting er en catch-all mail, kræver at det er en liste.</label><br/>
+	Dette er en:<br/>
+	<input type="radio" name="t" value="list" id="LIST"<?php if($M['mail'] != $M['destination']){echo " checked=\"checked\"";}?>/><label for="LIST" class="radio">En maillingliste</label><br/>
+	<input type="radio" name="t" value="mail" id="MAIL"<?php if($M['mail'] == $M['destination']){echo " checked=\"checked\"";}?>/><label for="MAIL" class="radio">En lokal mail</label><br/>
+	<div id="list"<?php if($M['mail'] != $M['destination']){echo " style=\"display:block\"";}?>>
+		<h3>Mails:</h3>
+		Skriv de mails (hele mailen) der skal sendes videre til.<br/>
+		Et tomt felt bliver slettet.<br/>
+		<br/>
+		<div id="content">
+		<?php
+			$i = 0;
+			if($M['mail'] != $M['destination']){
+				$mails = explode(",", $M['destination']);
+				foreach($mails as $k => $mail){
+					$i++;
+					echo "<input type=\"email\" name=\"$i\" value=\"$mail\"/><label></label><br/>";
+				}
+			}
+			else{
+				$i++;
+				echo "<input type=\"email\" name=\"$i\"/><label></label><br/>";
+			}
+		?>
+		</div>
+		<input type="hidden" name="b" value="<?php echo $i;?>"/>
+		<button class="MOAR">En mail mere</button>
+	</div>
+	<div id="mail"<?php if($M['mail'] == $M['destination']){echo " style=\"display:block\"";}?>>
+		<?php
+			if($M['mail'] == $M['destination']){
+				$x = mysqli_fetch_array(mysqli_query($db,"SELECT * FROM users WHERE id='$m'"));
+				echo "<input type=\"hidden\" name=\"u\" value=\"".$x['id']."\"/>";
+			}
+			else{
+				echo "<input type=\"hidden\" name=\"u\" value=\"\"/>";
+			}
+		?>
+		<h3>Lokal mail info:</h3>
+		Der skal lige sætte lidt info.<br/>
+		Feltet skal fyldes.<br/>
+		<br/>
+		Password:<br/>
+		<input type="text" name="p"/><label>Et kodeord, intet skrevet = intet ændres</label><br/>
+	</div>
+	<br/>
+	<button class="submit">Opret mail</button>
+</form>
+<script type="text/javascript">
+	$(function(){
+		$("input[name='t']").change(function(){
+			var T = $(this).val();
+			$("div#"+T).slideDown(400);
+			if(T == "mail")
+				$("div#list").slideUp(400);
+			else
+				$("div#mail").slideUp(400);
+		});
+		$(".MOAR").click(function(e){
+			e.preventDefault();
+			var n = $("input[name='b']").val();
+			n++;
+			$(".template").clone().appendTo("#content");
+			$("#content .template").attr("name", n);
+			$("#content .template").slideDown(250);
+			$("#content .template").removeClass("template");
+			$("#content").append("<label></label><br/>");
+			$("input[name='b']").val(n);
+		});
+		$(".submit").click(function(e){
+			e.preventDefault();
+			var M = $("input[name='m']").val();
+			var T = $("input[name='t']").val();
+			var B = $("input[name='b']").val();
+			var P = $("input[name='p']").val();
+			var aID = $("input[name='aID']").val(); // Alias ID
+			var U = $("input[name='u']").val();
+			var i = 1;
+			var n = 1
+			var dom = "";
+			while(i <= B){
+				var y = $("select[name=\""+i+"\"]").val();
+				if(y != ""){
+					if(i > n)
+						dom += ",";
+					dom += y;
+				}
+				if(dom.length == 0)
+					n++;
+				i++;
+			}
+			$.post("/ajax.php", {action: "editMail", d: D, b: B, bb: dom, t: T, p: P}).done(function(r){
+				if(r == "Succes"){
+					setmsg("Oprettelse lykkedes.", "succes");
+					interval = setInterval(Load("/domain/<?php echo $d;?>"), 2500);
+				}
+				else{
+					setmsg(r, "error");
+				}
+			});
+		});
+	});
+</script>
+<input class="template" type="email" name=""/>
 <?php
 			}
 		}
@@ -169,6 +277,7 @@
 </script>
 <select class="template">
 	<option value="0">Vælg en bruger</option>
+	<?php $q = mysqli_query($db, "SELECT * FROM login ORDER BY u ASC");while($r = mysqli_fetch_array($q)){?><option value="<?php echo $r['uID'];?>"><?php echo $r['u'];?></option><?php }?>
 </select>
 <?php
 			}
