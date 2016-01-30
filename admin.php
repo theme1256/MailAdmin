@@ -74,7 +74,7 @@
 			$("#domains .template").attr("name", n);
 			$("#domains .template").slideDown(250);
 			$("#domains .template").removeClass("template");
-			$("#domains").append("<br/>");
+			$("#domains").append("<label></label><br/>");
 			$("input[name='d']").val(n);
 		});
 	});
@@ -134,6 +134,7 @@
 			$.post("/ajax.php", {action: "newUser", u: U, p: P, dd: dom}).done(function(r){
 				if(r == "Success"){
 					setmsg("Oprettelse lykkedes.", "succes");
+					interval = setInterval(ReLoad(), 2500);
 				}
 				else{
 					setmsg(r, "error");
