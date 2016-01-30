@@ -19,7 +19,7 @@
 	<h3>Domæner:</h3>
 	Tomme felter bliver slettet.<br/><br/>
 	<?php
-		$q = mysqli_query($db, "SELECT * FROM con WHERE uID=".$r['uID']);
+		$q = mysqli_query($db, "SELECT * FROM con INNER JOIN domains ON domains.pkid=con.dID WHERE uID=".$r['uID']." ORDER BY domain ASC");
 		$i = 1;
 	?>
 	<input type="hidden" name="d" value="<?php echo mysqli_num_rows($q);?>"/>
@@ -165,6 +165,7 @@
 		else{
 			// Vis en liste med brugerer
 ?>
+<a href="/" class="bach">Tilbage til domæneliste</a>
 <h2>Brugerer</h2>
 <?php
 	$q = mysqli_query($db,"SELECT * FROM login ORDER BY u ASC");
@@ -181,6 +182,7 @@
 		// Ikke superadmin, vis info om selv
 		$r = mysqli_fetch_array(mysqli_query($db,"SELECT * FROM login WHERE uID=$u"));
 ?>
+<a href="/" class="bach">Tilbage til domæneliste</a>
 <h2>Info om dig</h2>
 <form class="admin">
 	Brugernavn:<br/>
