@@ -80,7 +80,7 @@
 			$.post("/ajax.php", {action: "newMail", d: D, b: B, bb: dom, t: T, p: P}).done(function(r){
 				if(r == "Succes"){
 					setmsg("Oprettelse lykkedes.", "succes");
-					interval = setInterval(ReLoad(), 2500);
+					interval = setInterval(Load("/domain/<?php echo $d;?>"), 2500);
 				}
 				else{
 					setmsg(r, "error");
@@ -158,7 +158,7 @@
 			$.post("/ajax.php", {action: "newDomain", d: D, b: B, bb: dom}).done(function(r){
 				if(r == "Succes"){
 					setmsg("Oprettelse lykkedes.", "succes");
-					interval = setInterval(ReLoad(), 2500);
+					interval = setInterval(Load("/"), 2500);
 				}
 				else{
 					setmsg(r, "error");

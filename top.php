@@ -38,6 +38,10 @@
 			location.reload();
 			clearInterval(interval);
 		}
+
+		function Load(l){
+			location.href(l);
+		}
 		</script>
 	</head>
 	<body>
