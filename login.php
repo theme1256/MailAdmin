@@ -24,3 +24,6 @@
 		});
 	});
 </script>
+<?php
+	include "foot.php";
+?>
