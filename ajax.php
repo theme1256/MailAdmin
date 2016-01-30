@@ -148,4 +148,17 @@
 			echo "Fejl: Buger findes ikke.";
 		}
 	}
+	elseif($action == "newDomain"){
+		// Opret et nyt domæne og giv de valgte brugere rettighed til det
+	}
+	elseif($action == "newMail"){
+		// Opret ny mail eller liste, tjek først om ting er tomme, derefter om det er en mail eller en liste
+	}
+	elseif($action == "editMail"){
+		// Ret den givne mail eller liste, slet login, hvis det er skift til liste, opret login hvis skift til mail
+	}
+	else{
+		// Action er ikke sat, giv fejl
+		echo "Fejl: Action ikke defineret eller defineret forkert.";
+	}
 ?>
