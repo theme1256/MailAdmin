@@ -360,6 +360,28 @@
 			}
 		}
 	}
+	elseif($action == "deleteMail"){
+		// Sletter den givne liste eller mail
+		$aID = rens($_POST['aID']);
+		$u = rens($_POST['u']);
+		// Slet bruger
+		if(!empty($u)){
+			if(!mysqli_query($db, "DELETE FROM users WHERE id='$u'")){
+				mysqli_rollback($db);
+				echo "Fejl: Kunne ikke slette bruger.";
+				exit;
+			}
+		}
+		if(!mysqli_query($db, "DELETE FROM aliases WHERE pkid=$aID")){
+			mysqli_rollback($db);
+			echo "Fejl: Kunne ikke slette alias";
+			exit;
+		}
+		else{
+			mysqli_commit($db);
+			echo "Succes";
+		}
+	}
 	else{
 		// Action er ikke sat, giv fejl
 		echo "Fejl: Action ikke defineret eller defineret forkert.";

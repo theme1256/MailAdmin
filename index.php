@@ -149,6 +149,7 @@
 	</div>
 	<br/>
 	<button class="submit">Opdater mail</button>
+	<button class="delete">Slet mail</button>
 </form>
 <script type="text/javascript">
 	$(function(){
@@ -202,6 +203,20 @@
 			$.post("/ajax.php", {action: "editMail", m: M, b: B, bb: dom, t: T, p: P, d: "<?php echo $d;?>", aID: aID, u: U}).done(function(r){
 				if(r == "Succes"){
 					setmsg("Opdatering lykkedes.", "succes");
+					interval = setInterval(Load("/domain/<?php echo $d;?>"), 2500);
+				}
+				else{
+					setmsg(r, "error");
+				}
+			});
+		});
+		$(".delete").click(function(e){
+			e.preventDefault();
+			var aID = $("input[name='aID']").val(); // Alias ID
+			var U = $("input[name='u']").val();
+			$.post("/ajax.php", {action: "deleteMail", aID: aID, u: U}).done(function(r){
+				if(r == "Succes"){
+					setmsg("Sletning lykkedes.", "succes");
 					interval = setInterval(Load("/domain/<?php echo $d;?>"), 2500);
 				}
 				else{

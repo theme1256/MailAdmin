@@ -13,6 +13,8 @@ input[type="text"], input[type="email"], input[type="password"], textarea, selec
 button, input[type="submit"]{ background: #2A88AD; padding: 8px 20px 8px 20px; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; color: #fff; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12); font: normal 30px 'Bitter', serif; -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17); -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17); box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17); border: 1px solid #257C9E; font-size: 15px; }
 button:hover, input[type="submit"]:hover{ background: #2A6881; -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28); -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28); box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28); }
 label:not(.radio){ width: 48%; margin: -35px 0 0 0; line-height: 35px; float: right; }
+.delete{ background-color: #AD2A2A; border-color: #9E2525; }
+.delete:hover{ background-color: #812A2A; }
 
 .template{ display: none !important; }
 
