@@ -220,9 +220,23 @@
 				exit;
 			}
 			// Opret mappe til domæne, hvis den ikke findes
-
+			exec('sudo /var/mail/virtual/dir.sh $d');
+			if(!is_dir("/var/mail/virtual/$d")){
+				mysqli_rollback($db);
+				echo "Fejl: Kunne ikke oprette mappe til domænet.";
+				exit;
+			}
 			// Opret mappe til bruger, hvis den ikke findes
-			
+			exec('sudo /var/mail/virtual/dir2.sh $d $m');
+			if(!is_dir("/var/mail/virtual/$d/$m")){
+				mysqli_rollback($db);
+				echo "Fejl: Kunne ikke oprette mappe til mailen.";
+				exit;
+			}
+			else{
+				mysqli_commit($db);
+				echo "Succes";
+			}
 		}
 		else{
 			// Opret som liste
@@ -293,9 +307,23 @@
 				exit;
 			}
 			// Opret mappe til domæne, hvis den ikke findes
-
+			exec('sudo /var/mail/virtual/dir.sh $d');
+			if(!is_dir("/var/mail/virtual/$d")){
+				mysqli_rollback($db);
+				echo "Fejl: Kunne ikke oprette mappe til domænet.";
+				exit;
+			}
 			// Opret mappe til bruger, hvis den ikke findes
-
+			exec('sudo /var/mail/virtual/dir2.sh $d $m');
+			if(!is_dir("/var/mail/virtual/$d/$m")){
+				mysqli_rollback($db);
+				echo "Fejl: Kunne ikke oprette mappe til mailen.";
+				exit;
+			}
+			else{
+				mysqli_commit($db);
+				echo "Succes";
+			}
 		}
 		elseif(strlen($u) > 0 && $t == "list"){
 			// Var en mail, skal være en liste
