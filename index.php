@@ -31,7 +31,7 @@
 		Feltet skal fyldes.<br/>
 		<br/>
 		Password:<br/>
-		<input type="text" name="p"/><label>Et kodeord, kan skiftes senere</label><br/>
+		<input type="password" name="p"/><label>Et kodeord, kan skiftes senere</label><br/>
 	</div>
 	<br/>
 	<button class="submit">Opret mail</button>
@@ -77,7 +77,6 @@
 					n++;
 				i++;
 			}
-			console.log(dom);
 			$.post("/ajax.php", {action: "newMail", m: M, b: B, bb: dom, t: T, p: P, d: "<?php echo $d;?>"}).done(function(r){
 				if(r == "Succes"){
 					setmsg("Oprettelse lykkedes.", "succes");
@@ -145,7 +144,7 @@
 		Feltet skal fyldes.<br/>
 		<br/>
 		Password:<br/>
-		<input type="text" name="p"/><label>Et kodeord, intet skrevet = intet ændres</label><br/>
+		<input type="password" name="p"/><label>Et kodeord, intet skrevet = intet ændres</label><br/>
 	</div>
 	<br/>
 	<button class="submit">Opdater mail</button>
