@@ -220,14 +220,14 @@
 				exit;
 			}
 			// Opret mappe til domæne, hvis den ikke findes
-			exec('sudo /var/mail/virtual/dir.sh $d');
+			exec(' mkdir /var/mail/virtual/'.$d);
 			if(!is_dir("/var/mail/virtual/$d")){
 				mysqli_rollback($db);
 				echo "Fejl: Kunne ikke oprette mappe til domænet.";
 				exit;
 			}
 			// Opret mappe til bruger, hvis den ikke findes
-			exec('sudo /var/mail/virtual/dir2.sh $d $m');
+			exec(' mkdir /var/mail/virtual/'.$d.'/'.$m);
 			if(!is_dir("/var/mail/virtual/$d/$m")){
 				mysqli_rollback($db);
 				echo "Fejl: Kunne ikke oprette mappe til mailen.";
@@ -235,6 +235,7 @@
 			}
 			else{
 				mysqli_commit($db);
+				exec('chmod 775 -R /var/mail/virtual');
 				echo "Succes";
 			}
 		}
