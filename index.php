@@ -60,7 +60,7 @@
 		$(".submit").click(function(e){
 			e.preventDefault();
 			var M = $("input[name='m']").val();
-			var T = $("input[name='t']").val();
+			var T = $("input[name='t']:checked").val();
 			var B = $("input[name='b']").val();
 			var P = $("input[name='p']").val();
 			var i = 1;
@@ -77,6 +77,7 @@
 					n++;
 				i++;
 			}
+			console.log(T);
 			$.post("/ajax.php", {action: "newMail", m: M, b: B, bb: dom, t: T, p: P, d: "<?php echo $d;?>"}).done(function(r){
 				if(r == "Succes"){
 					setmsg("Oprettelse lykkedes.", "succes");
@@ -179,7 +180,7 @@
 		$(".submit").click(function(e){
 			e.preventDefault();
 			var M = $("input[name='m']").val();
-			var T = $("input[name='t']").val();
+			var T = $("input[name='t']:checked").val();
 			var B = $("input[name='b']").val();
 			var P = $("input[name='p']").val();
 			var aID = $("input[name='aID']").val(); // Alias ID
@@ -188,7 +189,7 @@
 			var n = 1
 			var dom = "";
 			while(i <= B){
-				var y = $("select[name=\""+i+"\"]").val();
+				var y = $("input[name=\""+i+"\"]").val();
 				if(y != ""){
 					if(i > n)
 						dom += ",";
