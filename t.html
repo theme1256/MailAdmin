@@ -1,0 +1,21 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
+<textarea id="in"></textarea><br/>
+<input id="input" type="submit" value="generate"/><br/>
+<div id="out"></div>
+<br/>
+<script>
+$(function(){
+	$("#input").click(function(e){
+		e.preventDefault();
+		var out = "backup@ravnsholt.dk,";
+		var lines = $('#in').val().split('\n');
+		for(var i = 0;i < lines.length;i++){
+			var v = lines[i].split(";");
+			if(i>0)
+				out += ",";
+			out += v[0];
+		}
+		$("#out").html(out);
+	});
+});
+</script>

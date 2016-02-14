@@ -7,6 +7,7 @@
 		<title>Folkmann mailadmin</title>
 		<meta charset="utf-8">
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+		<link rel="shortcut icon" href="/favicon.png" />
 		<meta http-equiv="Pragma" content="no-cache"/>
 		<link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
