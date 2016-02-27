@@ -1,5 +1,23 @@
 <?php
 	include "common.php";
+
+    require "Mobile_Detect.php";
+    $detect = new Mobile_Detect;
+    if($detect->isTablet()){$trfl = true;}
+    else{$trfl = false;}
+    define("TABLET",$trfl);
+    if($detect->isMobile() && !$detect->isTablet()){$trfl = true;}
+    else{$trfl = false;}
+    define("MOBILE",$trfl);
+    if($detect->isiOS()){$trfl = true;}
+    else{$trfl = false;}
+    define("IOS",$trfl);
+    if($detect->isAndroidOS()){$trfl = true;}
+    else{$trfl = false;}
+    define("ANDROID",$trfl);
+    if(TABLET || MOBILE || IOS || ANDROID){$trfl = false;}
+    else{$trfl = true;}
+    define("onlyScreen", $trfl);
 ?>
 <!DOCTYPE html>
 <html>
@@ -12,6 +30,9 @@
 		<link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
 		<link rel="stylesheet" href="/style.css" type="text/css" media="all" />
+		<?php if(!onlyScreen):?>
+		<link rel="stylesheet" href="/mobile.css" type="text/css" media="all" />
+		<?php endif;?>
 		<script type="text/javascript">
 		var cleaner;
 		var interval
