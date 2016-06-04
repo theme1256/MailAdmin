@@ -42,16 +42,23 @@
 		}
 	}
 
+	// Returnerer navnet på den nuværende fil og hvilken mappe den er i
+	function pageName(){
+		return str_replace(".php", "", $_SERVER['REQUEST_URI']);
+	}
+	// Tjekker om det givne er den side man er på lige nu
+	function isItThisPage($check){
+		if($check == pageName() || strpos(pageName(), $check))
+			return true;
+		else
+			return false;
+	}
+
 	// Password-stuff
-	function haash($p, $s = NULL){
+	function haash($p){
 		$cost = 10;
-		if($s == NULL){
-			$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
-			$salt = sprintf("$2a$%02d$", $cost) . $salt;
-		}
-		else{
-			$salt = $s;
-		}
-		return crypt($password, $salt);
+		$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
+		$salt = sprintf("$2a$%02d$", $cost) . $salt;
+		return password_hash($p, PASSWORD_BCRYPT, ['cost' => $cost, 'salt' => $salt]);
 	}
 ?>

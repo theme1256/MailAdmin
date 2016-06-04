@@ -127,7 +127,7 @@
 		$q = mysqli_query($db, "SELECT * FROM login WHERE u='$u'");
 		if(mysqli_num_rows($q) > 0){
 			$r = mysqli_fetch_array($q);
-			if(haash($p, $r['p']) == $r['p']){
+			if(password_verify($p, $r['p']) == $r['p']){
 				// Passer
 				$_SESSION['user'] = $r['uID'];
 				echo "Succes";
