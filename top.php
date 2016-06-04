@@ -1,23 +1,5 @@
 <?php
 	include "common.php";
-
-    require "Mobile_Detect.php";
-    $detect = new Mobile_Detect;
-    if($detect->isTablet()){$trfl = true;}
-    else{$trfl = false;}
-    define("TABLET",$trfl);
-    if($detect->isMobile() && !$detect->isTablet()){$trfl = true;}
-    else{$trfl = false;}
-    define("MOBILE",$trfl);
-    if($detect->isiOS()){$trfl = true;}
-    else{$trfl = false;}
-    define("IOS",$trfl);
-    if($detect->isAndroidOS()){$trfl = true;}
-    else{$trfl = false;}
-    define("ANDROID",$trfl);
-    if(TABLET || MOBILE || IOS || ANDROID){$trfl = false;}
-    else{$trfl = true;}
-    define("onlyScreen", $trfl);
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,10 +20,6 @@
 		<script src="/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="/css/theme.css" type="text/css" media="all" />
 		<link rel="stylesheet" href="/css/sticky-footer-navbar.css" type="text/css" media="all" />
-		<?/*<link rel="stylesheet" href="/style.css" type="text/css" media="all" />
-		<?php if(!onlyScreen):?>
-		<link rel="stylesheet" href="/mobile.css" type="text/css" media="all" />
-		<?php endif;*/?>
 		<script type="text/javascript">
 		// Fjerner msg og sætter en timer til at få tømt den
 		function clean(){
@@ -92,6 +70,7 @@
 						<?php if($u == 1):?>
 						<li<?php if(isItThisPage("domain/new")){?> class="active"<?php }?>><a href="/domain/new">Opret nyt domæne</a></li>
 						<?php endif;?>
+						<li><a href="/logout">Log ud</a></li>
 						<?php endif;?>
 					</ul>
 				</div><!--/.nav-collapse -->
