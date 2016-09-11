@@ -67,9 +67,6 @@
 						<?php if(access()):?>
 						<li<?php if(!isItThisPage("user") && !isItThisPage("domain/new")){?> class="active"<?php }?>><a href="/">Domæner</a></li>
 						<li<?php if(isItThisPage("user")){?> class="active"<?php }?>><a href="/user">Ret bruger</a></li>
-						<?php if($u == 1):?>
-						<li<?php if(isItThisPage("domain/new")){?> class="active"<?php }?>><a href="/domain/new">Opret nyt domæne</a></li>
-						<?php endif;?>
 						<li><a href="/logout">Log ud</a></li>
 						<?php endif;?>
 					</ul>

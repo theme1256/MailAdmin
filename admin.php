@@ -25,16 +25,16 @@
 			<h3>Domæner:</h3>
 			Tomme felter bliver slettet.<br/><br/>
 			<?php
-				$q = mysqli_query($db, "SELECT * FROM con INNER JOIN domains ON domains.pkid=con.dID WHERE uID=".$r['uID']." ORDER BY domain ASC");
+				$q = mysqli_query($db, "SELECT * FROM con INNER JOIN domain ON domain.domain=con.d WHERE uID=".$r['uID']." ORDER BY domain ASC");
 				$i = 1;
 			?>
 			<input type="hidden" name="d" value="<?php echo mysqli_num_rows($q);?>"/>
 			<div id="domains">
-				<?php while($X = mysqli_fetch_array($q)){ $Q = mysqli_query($db, "SELECT * FROM domains ORDER BY domain ASC");?>
+				<?php while($X = mysqli_fetch_array($q)){ $Q = mysqli_query($db, "SELECT * FROM domain ORDER BY domain ASC");?>
 				<div class="form-group">
 					<select class="form-control input-sm" name="<?php echo $i; $i++;?>">
 						<option value="0">vælg en</option>
-						<?php while($Y = mysqli_fetch_array($Q)){?><option value="<?php echo $Y['pkid'];?>"<?php if($Y['pkid'] == $X['dID']){echo " selected=\"selected\"";}?>><?php echo $Y['domain'];?></option><?php }?>
+						<?php while($Y = mysqli_fetch_array($Q)){?><option value="<?php echo $Y['domain'];?>"<?php if($Y['domain'] == $X['domain']){echo " selected=\"selected\"";}?>><?php echo $Y['domain'];?></option><?php }?>
 					</select>
 				</div>
 				<?php }?>
@@ -87,18 +87,18 @@
 				});
 			});
 		</script>
-		<?php $q = mysqli_query($db, "SELECT * FROM domains ORDER BY domain ASC");?>
+		<?php $q = mysqli_query($db, "SELECT * FROM domain ORDER BY domain ASC");?>
 		<div class="form-group TEMPLATE">
 			<select class="template form-control input-sm" name="">
 				<option value="0">vælg en</option>
-				<?php while($r = mysqli_fetch_array($q)){?><option value="<?php echo $r['pkid'];?>"><?php echo $r['domain'];?></option><?php }?>
+				<?php while($r = mysqli_fetch_array($q)){?><option value="<?php echo $r['domain'];?>"><?php echo $r['domain'];?></option><?php }?>
 			</select>
 		</div>
 <?php
 		}
 		elseif($_GET['u'] == "new"){
 			// Der skal oprettes en ny bruger
-			$q = mysqli_query($db, "SELECT * FROM domains ORDER BY domain ASC");
+			$q = mysqli_query($db, "SELECT * FROM domain ORDER BY domain ASC");
 ?>
 		<a href="/user" class="bach btn btn-info" role="button">Tilbage til liste</a>
 		<h2>Opret en bruger</h2>
@@ -118,7 +118,7 @@
 				<div class="form-group">
 					<select class="form-control input-sm" name="1">
 						<option value="0">vælg en</option>
-						<?php while($r = mysqli_fetch_array($q)){?><option value="<?php echo $r['pkid'];?>"><?php echo $r['domain'];?></option><?php }?>
+						<?php while($r = mysqli_fetch_array($q)){?><option value="<?php echo $r['domain'];?>"><?php echo $r['domain'];?></option><?php }?>
 					</select>
 				</div>
 			</div>
@@ -171,11 +171,11 @@
 				});
 			});
 		</script>
-		<?php $q = mysqli_query($db, "SELECT * FROM domains ORDER BY domain ASC");?>
+		<?php $q = mysqli_query($db, "SELECT * FROM domain ORDER BY domain ASC");?>
 		<div class="form-group TEMPLATE">
 			<select class="template form-control input-sm" name="">
 				<option value="0">vælg en</option>
-				<?php while($r = mysqli_fetch_array($q)){?><option value="<?php echo $r['pkid'];?>"><?php echo $r['domain'];?></option><?php }?>
+				<?php while($r = mysqli_fetch_array($q)){?><option value="<?php echo $r['domain'];?>"><?php echo $r['domain'];?></option><?php }?>
 			</select>
 		</div>
 <?php
@@ -215,12 +215,12 @@
 			</div>
 			<h3>Domæner du har adgang til:</h3>
 			<?php
-				$q = mysqli_query($db, "SELECT * FROM con INNER JOIN con.dID=domains.pkid WHERE uID=".$r['uID']);
+				$q = mysqli_query($db, "SELECT * FROM con INNER JOIN con.d=domain.domain WHERE uID=".$r['uID']);
 			?>
 			<div id="domains">
 				<ul class="list-unstyled">
 				<?php
-					while($X = mysqli_fetch_array($q)){ $Q = mysqli_query($db, "SELECT * FROM domains ORDER BY domain ASC");
+					while($X = mysqli_fetch_array($q)){ $Q = mysqli_query($db, "SELECT * FROM domain ORDER BY domain ASC");
 						echo "<li>".$X['domain']."</li>";
 					}
 				?>

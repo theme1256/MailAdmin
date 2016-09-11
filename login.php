@@ -21,7 +21,7 @@
 					$.post("/ajax.php", {action: "login", u: U, p: P}).done(function(r){
 						if(r == "Succes"){
 							setmsg("Login lykkedes, reloader siden.", "alert-success");
-							setTimeout("ReLoad()", 2500);
+							setTimeout("ReLoad()", 1500);
 						}
 						else{
 							setmsg(r, "alert-danger");

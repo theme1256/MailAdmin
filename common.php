@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$db = mysqli_connect("localhost","mail","37WJCKaJKjE6aXXh","maildb");
+	$db = mysqli_connect("localhost","mail","37WJCKaJKjE6aXXh","vmail");
 
 	// Tjekker om en bruger er logget ind og returnerer true/false
 	$u = 0;

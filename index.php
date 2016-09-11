@@ -16,22 +16,7 @@
 				<label for="InputEmail">Adresse:</label>
 				<input type="text" class="form-control" id="InputEmail" name="m" placeholder="Det der står før @<?php echo $d?>, ingen ting er en catch-all mail, kræver at det er en liste.">
 			</div>
-			<div class="form-group">
-				<label for="">Dette er en:</label>
-				<div class="radio">
-					<label>
-						<input type="radio" name="t" id="optionsRadios1" value="list">
-						En maillingliste
-					</label>
-				</div>
-				<div class="radio">
-					<label>
-						<input type="radio" name="t" id="optionsRadios2" value="mail">
-						En lokal mail
-					</label>
-				</div>
-			</div>
-			<div id="list" style="display:none;">
+			<div id="list">
 				<h3>Mails:</h3>
 				<input type="hidden" name="b" value="1"/>
 				<p>
@@ -43,30 +28,11 @@
 				</div>
 				<button type="button" class="MOAR btn btn-primary">En mail mere</button>
 			</div>
-			<div id="mail" style="display:none;">
-				<h3>Lokal mail info:</h3>
-				<p>
-					Der skal lige sætte lidt info.<br/>
-					Feltet skal fyldes.<br/>
-				</p>
-				<div class="form-group">
-					<label for="InputEmail">Password:</label>
-					<input class="form-control" type="password" name="p" placeholder="Et kodeord, kan skiftes senere"/>
-				</div>
-			</div>
 			<br/>
 			<button type="button" class="submit btn btn-success">Opret mail</button>
 		</form>
 		<script type="text/javascript">
 			$(function(){
-				$("input[name='t']").change(function(){
-					var T = $(this).val();
-					$("div#"+T).slideDown(400);
-					if(T == "mail")
-						$("div#list").slideUp(400);
-					else
-						$("div#mail").slideUp(400);
-				});
 				$(".MOAR").click(function(e){
 					e.preventDefault();
 					var n = $("input[name='b']").val();
@@ -116,32 +82,17 @@
 			}
 			else{
 				// Vis info om den givne mail på det givne domæne
-				$M = mysqli_fetch_array(mysqli_query($db, "SELECT * FROM aliases WHERE mail='$m'"));
+				$M = mysqli_fetch_array(mysqli_query($db, "SELECT * FROM alias WHERE address='$m'"));
 ?>
 		<a href="/domain/<?php echo $d;?>" class="bach btn btn-info" role="button">Tilbage til domæne</a>
-		<h2>Info om <?php if($M['mail'] == $M['destination']){echo "mail: ";}else{echo "liste: ";} echo $m;?></h2>
+		<h2>Info om <?php if($M['address'] == $M['goto']){echo "mail: ";}else{echo "liste: ";} echo $m;?></h2>
 		<form class="mail">
-			<input type="hidden" name="aID" value="<?php echo $M['pkid'];?>"/>
+			<input type="hidden" name="aID" value="<?php echo $M['address'];?>"/>
 			<div class="form-group">
 				<label for="InputEmail">Adresse:</label>
-				<input type="text" class="form-control" id="InputEmail" name="m" placeholder="Det der står før @<?php echo $d?>, ingen ting er en catch-all mail, kræver at det er en liste." value="<?php echo str_replace("@".$d, "", $M['mail']);?>">
+				<input type="text" class="form-control" id="InputEmail" name="m" placeholder="Det der står før @<?php echo $d?>, ingen ting er en catch-all mail, kræver at det er en liste." value="<?php echo str_replace("@".$d, "", $M['address']);?>">
 			</div>
-			<div class="form-group">
-				<label for="">Dette er en:</label>
-				<div class="radio">
-					<label>
-						<input type="radio" name="t" id="optionsRadios1" value="list"<?php if($M['mail'] != $M['destination']){echo " checked=\"checked\"";}?>>
-						En maillingliste
-					</label>
-				</div>
-				<div class="radio">
-					<label>
-						<input type="radio" name="t" id="optionsRadios2" value="mail"<?php if($M['mail'] == $M['destination']){echo " checked=\"checked\"";}?>>
-						En lokal mail
-					</label>
-				</div>
-			</div>
-			<div id="list"<?php if($M['mail'] != $M['destination']){echo " style=\"display:block;\"";}else{echo " style=\"display:none;\"";}?>>
+			<div id="list">
 				<h3>Mails:</h3>
 				<p>
 					Skriv de mails (hele mailen) der skal sendes videre til.<br/>
@@ -150,41 +101,15 @@
 				<div id="content">
 				<?php
 					$i = 0;
-					if($M['mail'] != $M['destination']){
-						$mails = explode(",", $M['destination']);
-						foreach($mails as $k => $mail){
-							$i++;
-							echo "<div class=\"form-group\"><input class=\"form-control\" type=\"email\" name=\"$i\" value=\"$mail\"/></div>";
-						}
-					}
-					else{
+					$mails = explode(",", $M['goto']);
+					foreach($mails as $k => $mail){
 						$i++;
-						echo "<input type=\"email\" name=\"$i\"/><label></label><br/>";
+						echo "<div class=\"form-group\"><input class=\"form-control\" type=\"email\" name=\"$i\" value=\"$mail\"/></div>";
 					}
 				?>
 				</div>
 				<input type="hidden" name="b" value="<?php echo $i;?>"/>
 				<button type="button" class="MOAR btn btn-primary">En mail mere</button>
-			</div>
-			<div id="mail"<?php if($M['mail'] == $M['destination']){echo " style=\"display:block;\"";}else{echo " style=\"display:none;\"";}?>>
-				<?php
-					if($M['mail'] == $M['destination']){
-						$x = mysqli_fetch_array(mysqli_query($db,"SELECT * FROM users WHERE id='$m'"));
-						echo "<input type=\"hidden\" name=\"u\" value=\"".$x['id']."\"/></div>";
-					}
-					else{
-						echo "<input type=\"hidden\" name=\"u\" value=\"\"/>";
-					}
-				?>
-				<h3>Lokal mail info:</h3>
-				<p>
-					Der skal lige sætte lidt info.<br/>
-					Feltet skal fyldes.<br/>
-				</p>
-				<div class="form-group">
-					<label for="InputEmail">Password:</label>
-					<input class="form-control" type="password" name="p" placeholder="Et kodeord, intet skrevet = intet ændres"/>
-				</div>
 			</div>
 			<br/>
 			<button type="button" class="submit btn btn-success">Opdater mail</button>
@@ -192,20 +117,6 @@
 		</form>
 		<script type="text/javascript">
 			$(function(){
-				$("input[name='t']").change(function(){
-					var T = $(this).val();
-					$("div#"+T).slideDown(400);
-					if(T == "mail"){
-						$("div#list").slideUp(400);
-						if($("input[name='u']").length > 0)
-							$("intput[name='m']").attr("disabled","disabled");
-					}
-					else{
-						$("div#mail").slideUp(400);
-						if($("input[name='u']").length > 0)
-							$("input[name='m']").removeAttr("disabled");
-					}
-				});
 				$(".MOAR").click(function(e){
 					e.preventDefault();
 					var n = $("input[name='b']").val();
@@ -360,19 +271,12 @@
 		<h2>Mails til domæne: <?php echo $d;?></h2>
 		<ul class="list-unstyled">
 <?php
-				$q = mysqli_query($db, "SELECT * FROM aliases WHERE mail LIKE '%@$d' ORDER BY mail ASC");
+				$q = mysqli_query($db, "SELECT * FROM alias WHERE address LIKE '%@$d' ORDER BY address ASC");
 				while($r = mysqli_fetch_array($q)){
-					if($r['mail'] == $r['destination']){
-						// Det er en lokal mail
-						echo "<li><a href=\"/domain/$d/mail/".$r['mail']."\">Lokal mail: ".$r['mail']."</a></li>\n";
-					}
-					else{
-						// Det er nok en maillingsliste
-						echo "<li><a href=\"/domain/$d/mail/".$r['mail']."\">Mailliste: ".$r['mail']."</a></li>\n";
-					}
+					echo "<li><a href=\"/domain/$d/mail/".$r['address']."\">Mailliste: ".$r['address']."</a></li>\n";
 				}
 				echo "<li>&nbsp;</li>\n";
-				echo "<li><a href=\"/domain/$d/mail/new\">Opret ny mail/liste</a></li>\n";
+				echo "<li><a href=\"/domain/$d/mail/new\">Opret ny liste</a></li>\n";
 				echo "</ul>\n";
 			}
 		}
@@ -386,7 +290,7 @@
 		</p>
 		<ul class="list-unstyled">
 <?php
-		$q = mysqli_query($db, "SELECT * FROM con INNER JOIN domains ON con.dID=domains.pkid WHERE uID=$u ORDER BY domain ASC");
+		$q = mysqli_query($db, "SELECT * FROM con INNER JOIN domain ON con.d=domain.domain WHERE uID=$u ORDER BY domain ASC");
 		while($r = mysqli_fetch_array($q)){
 			echo "			<li><a href=\"/domain/".$r['domain']."\">".$r['domain']."</a></li>\n";
 		}
