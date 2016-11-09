@@ -2,6 +2,11 @@
 	session_start();
 	$db = mysqli_connect("localhost","mail","37WJCKaJKjE6aXXh","vmail");
 
+	if($_SERVER["HTTP_X_FORWARDED_PROTO"] != "https"){
+		header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+		exit();
+	}
+
 	// Tjekker om en bruger er logget ind og returnerer true/false
 	$u = 0;
 	function access($d = NULL){
