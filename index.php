@@ -51,7 +51,7 @@
 					var B = $("input[name='b']").val();
 					var P = $("input[name='p']").val();
 					var i = 1;
-					var n = 1
+					var n = 1;
 					var dom = "";
 					while(i <= B){
 						var y = $("input[name=\""+i+"\"]").val();
@@ -275,9 +275,9 @@
 				while($r = mysqli_fetch_array($q)){
 					echo "<li><a href=\"/domain/$d/mail/".$r['address']."\">Mailliste: ".$r['address']."</a></li>\n";
 				}
-				echo "<li>&nbsp;</li>\n";
+				/*echo "<li>&nbsp;</li>\n";
 				echo "<li><a href=\"/domain/$d/mail/new\">Opret ny liste</a></li>\n";
-				echo "</ul>\n";
+				echo "</ul>\n";*/
 			}
 		}
 	}
