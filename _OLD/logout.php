@@ -1,5 +1,5 @@
 <?php
-	include $_SERVER["DOCUMENT_ROOT"]."/etc/common.php";
+	include "common.php";
 
 	session_destroy();
 

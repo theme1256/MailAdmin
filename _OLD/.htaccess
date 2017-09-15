@@ -1,0 +1,19 @@
+
+# Rewrites
+Options -MultiViews
+RewriteEngine On
+
+RewriteRule ^user/(.*)$ admin.php?u=$1
+RewriteRule ^user$ admin.php
+RewriteRule ^domain/(.*)/mail/(.*)$ index.php?domain=$1&mail=$2
+RewriteRule ^domain/(.*)$ index.php?domain=$1
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+
+# Prevent viewing of .htaccess file
+<Files .htaccess>
+	order allow,deny
+	deny from all
+</Files>
