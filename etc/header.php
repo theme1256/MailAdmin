@@ -67,7 +67,7 @@
 			html, body{ height: 100%; }
 			.wrap > .container{ padding-top: 70px; }
 			.wrap{ min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -60px; }
-			.footer { /*position: absolute; bottom: 0; width: 100%;*/ height: 60px; background-color: #f5f5f5; }
+			.footer { height: 60px; background-color: #f5f5f5; }
 			.footer > .container > .text-muted{ margin: 20px 0; }
 			.push{ height: 60px; }
 		</style>
@@ -87,9 +87,11 @@
 					</div>
 					<div id="navbar" class="collapse navbar-collapse">
 						<ul class="nav navbar-nav">
-							<li class="active"><a href="#">Home</a></li>
-							<li><a href="#about">About</a></li>
-							<li><a href="#contact">Contact</a></li>
+							<?php if($Content->access()):?>
+							<li<?= $Content->activePage(["index", "domain"]);?>><a href="/">Domæner</a></li>
+							<li<?= $Content->activePage(["user"]);?>><a href="/user">Ret bruger</a></li>
+							<li><a href="/logout">Log ud</a></li>
+							<?php endif;?>
 						</ul>
 					</div>
 				</div>

@@ -8,9 +8,9 @@ RewriteEngine On
 
 # Insert rewrites here:
 
-# Sample:
-# RewriteRule ^vagter/year/(.*)/(.*)$ /vagter/year.php?year=$1&action=$2 [L]
-# RewriteRule ^vagter/year/(.*)$ /vagter/year.php?year=$1 [L]
+RewriteRule ^user/(.*)$ admin.php?u=$1
+RewriteRule ^domain/(.*)/(.*)$ domain.php?domain=$1&mail=$2
+RewriteRule ^domain/(.*)$ domain.php?domain=$1
 
 # No need for .php
 RewriteCond %{REQUEST_FILENAME} !-f

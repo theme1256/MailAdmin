@@ -15,6 +15,27 @@
 		}
 	}
 
+	if(isset($_COOKIE['debug'])){
+		define('DEBUG', true);
+	} else{
+		define('DEBUG', false);
+	}
+
+	if(DEBUG)
+		error_log("POST: ".var_export($_POST, true));
+	if(DEBUG)
+		error_log("GET: ".var_export($_GET, true));
+	if(DEBUG)
+		error_log("SESSION: ".var_export($_SESSION, true));
+
+	// Henter variabler fra URL
+	if(!empty($_GET['domain'])){
+		$d = rens($_GET['domain']);
+		if(!empty($_GET['mail'])){
+			$m = rens($_GET['mail']);
+		}
+	}
+
 	// Plugins
 	require_once(__DIR__ . "/plugins/Html2Text/Html2Text.php");
 	require_once(__DIR__ . "/plugins/Mobile-Detect-2.8.24/Mobile_Detect.php");
@@ -23,6 +44,10 @@
 	// Wrappers
 	require_once(__DIR__ . "/wrappers/email.php");
 
+	// Wrappers
+	require_once(__DIR__ . "/classes/Content.php");
+	$Content = new Content($con);
+
 
 	// Constants
 	define('HOME', '/');
@@ -30,6 +55,10 @@
 	define('CSS', ASSETS.'css/');
 	define('JS', ASSETS.'js/');
 	define('PLUGINS', ASSETS.'plugins/');
+	define('SCRIPTS', HOME.'scripts/');
+	define('ROOT', $_SERVER['DOCUMENT_ROOT']);
+	if(!isset($_SESSION['login']))
+		$_SESSION['login'] = false;
 
 	// Check device type
 	$mobile = new Mobile_Detect();

@@ -1,3 +1,4 @@
 *.sublime*
 .well-known
 .well-known/*
+etc/conf.php
