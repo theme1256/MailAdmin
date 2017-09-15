@@ -1,6 +1,7 @@
 <div class="col-md-8 col-md-offset-2">
 	<h2>Du har måske ikke adgang her, log lige ind</h2>
-	<form class="login">
+	<form class="login" action="<?= SCRIPTS;?>login.php">
+		<input type="hidden" name="method" value="regular">
 		<div class="form-group">
 			<label for="InputEmail">Brugernavn:</label>
 			<input type="text" class="form-control" id="InputEmail" name="u" placeholder="username">
@@ -20,6 +21,7 @@
 				e.preventDefault();
 				E = 0;
 				var D = {};
+				D.method = "ajax";
 				D.u = validate("#InputEmail");
 				D.p = validate("#InputPassword");
 				call("<?= SCRIPTS;?>login.php", D, function(d){
