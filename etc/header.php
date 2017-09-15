@@ -56,6 +56,59 @@
 			<?php else:?>
 				var DEVICE = "computer";
 			<?php endif;?>
+
+			function call($url, $data, _success, _fail){
+				$.ajax({
+					url: $url,
+					type: 'POST',
+					dataType: 'json',
+					data: $data,
+				}).done(function(d){
+					if(d.status == "success")
+						_success(d);
+					else
+						_fail(d);
+				}).fail(function(d){
+					console.log(d);
+					_fail(d);
+				});
+			}
+
+			var E = 0;
+			function validate(id, p = ".form-group"){
+				var obj = $(id);
+				var p = obj.closest(p);
+				p.removeClass("has-error");
+				p.removeClass("has-warning");
+				p.removeClass("has-success");
+				var val = obj.val();
+				if(val == "" || !val || val.length === 0 || val == 0){
+					p.addClass("has-error");
+					E++;
+					return false;
+				} else{
+					p.addClass("has-success");
+					return val;
+				}
+			}
+			function statusBox(id, msg, type){
+				var obj = $(id);
+				obj.slideUp();
+				obj.removeClass("alert-success");
+				obj.removeClass("alert-warning");
+				obj.removeClass("alert-danger");
+				obj.addClass("alert-"+type);
+				obj.html(msg);
+				obj.slideDown(400);
+				setTimeout(function(){
+					obj.slideUp(400);
+					obj.html("");
+				}, 8000);
+			}
+
+			function ReLoad(){
+				window.location = '<?= $_SERVER['REQUEST_URI'];?>';
+			}
 		</script>
 		<!-- Bootstrap -->
 		<link <?php echo $css_rule;?> href="<?= CSS;?>bootstrap.min.css?v=3.3.7"/>
@@ -83,7 +136,7 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" href="#"><?= $site['name'];?></a>
+						<a class="navbar-brand" href="/"><?= $site['name'];?></a>
 					</div>
 					<div id="navbar" class="collapse navbar-collapse">
 						<ul class="nav navbar-nav">
@@ -97,3 +150,10 @@
 				</div>
 			</nav>
 			<div class="container" role="main">
+				<?php
+					if(!$Content->access()){
+						// Der er ikke logget ind, vis login
+						require $_SERVER["DOCUMENT_ROOT"]."/login.php";
+						die();
+					}
+				?>
