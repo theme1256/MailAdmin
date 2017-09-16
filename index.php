@@ -5,7 +5,7 @@
 <h1><?= $Content->out(10);?></h1>
 
 <p>
-	Klik på en af dem for at blive vist informationer om mails på det domæne.<br/>
+	<?= $Content->out(20);?><br/>
 </p>
 
 <ul class="list-unstyled">
