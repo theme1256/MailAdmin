@@ -123,6 +123,7 @@
 </script>
 
 <?php else:?>
+<!-- Ret brugeren -->
 <?php
 	$u = $_GET['u'];
 	$q = $con->prepare("SELECT * FROM ma_login WHERE user LIKE (:u)");
@@ -130,7 +131,6 @@
 	$q->execute();
 	$U = $q->fetch(PDO::FETCH_ASSOC);
 ?>
-<!-- Ret brugeren -->
 
 <h1>Ret bruger</h1>
 
@@ -213,7 +213,7 @@
 			D.dom = "";
 			while(D.i <= D.d){
 				var y = $("select[name=\""+D.i+"\"]").val();
-				if(y > 0){
+				if(y.length > 0){
 					if(D.i > D.n)
 						D.dom += ",";
 					D.dom += y;
