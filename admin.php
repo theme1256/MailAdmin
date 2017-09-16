@@ -86,7 +86,7 @@
 			D.p = validate("#InputPassword");
 			D.d = $("input[name='d']").val();
 			D.i = 1;
-			D.n = 1
+			D.n = 1;
 			D.dom = "";
 			while(D.i <= D.d){
 				var y = $("select[name=\""+D.i+"\"]").val();
@@ -99,12 +99,16 @@
 					D.n++;
 				D.i++;
 			}
-			call("<?= SCRIPTS;?>admin.php", D, function(d){
-				statusBox(".status", d.msg, d.status);
-				setTimeout(function(){
-					window.location = "/admin";
-				}, 1500);
-			}, ".status");
+			if(E == 0){
+				call("<?= SCRIPTS;?>admin.php", D, function(d){
+					statusBox(".status", d.msg, d.status);
+					setTimeout(function(){
+						window.location = "/admin";
+					}, 1500);
+				}, ".status");
+			} else{
+				statusBox(".status", "Et felt er tomt.", "danger");
+			}
 		});
 
 		// Skal håndtere at der bliver trykket for at få en boks mere frem til at vælge hvad brugeren skal være admin for
@@ -179,7 +183,7 @@
 	<div class="form-group text-right">
 		<a type="button" class="MOAR btn btn-info">Endnu et domæne</a>
 		<button type="button" class="submit btn btn-primary">Ret bruger</button>
-		<button type="button" class="submit btn btn-danger">Slet bruger</button>
+		<button type="button" class="delete btn btn-danger">Slet bruger</button>
 	</div>
 	<?= $Content->statusBox();?>
 </form>
@@ -197,6 +201,24 @@
 
 <script type="text/javascript">
 	$(function(){
+		$(".delete").click(function(e){
+			E = 0;
+			var D = {};
+			D.method = "ajax";
+			D.action = "delete-user";
+			D.uID = validate("#uID");
+			if(E == 0){
+				call("<?= SCRIPTS;?>admin.php", D, function(d){
+					statusBox(".status", d.msg, d.status);
+					setTimeout(function(){
+						window.location = "/admin";
+					}, 1500);
+				}, ".status");
+			} else{
+				statusBox(".status", "ID feltet er tomt.", "danger");
+			}
+		});
+
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
@@ -207,9 +229,8 @@
 			D.u = validate("#InputEmail");
 			D.p = validate("#InputPassword");
 			D.d = $("input[name='d']").val();
-			D.id = <?= $U['userID'];?>;
 			D.i = 1;
-			D.n = 1
+			D.n = 1;
 			D.dom = "";
 			while(D.i <= D.d){
 				var y = $("select[name=\""+D.i+"\"]").val();
@@ -222,12 +243,16 @@
 					D.n++;
 				D.i++;
 			}
-			call("<?= SCRIPTS;?>admin.php", D, function(d){
-				statusBox(".status", d.msg, d.status);
-				setTimeout(function(){
-					window.location = "/admin";
-				}, 1500);
-			}, ".status");
+			if(E == 0){
+				call("<?= SCRIPTS;?>admin.php", D, function(d){
+					statusBox(".status", d.msg, d.status);
+					setTimeout(function(){
+						window.location = "/admin";
+					}, 1500);
+				}, ".status");
+			} else{
+				statusBox(".status", "Et felt er tomt.", "danger");
+			}
 		});
 
 		// Skal håndtere at der bliver trykket for at få en boks mere frem til at vælge hvad brugeren skal være admin for

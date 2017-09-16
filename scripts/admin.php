@@ -89,6 +89,29 @@
 		} else{
 			$o['msg'] = $Content->out(11);
 		}
+	} elseif($action == "delete-user"){
+		if(empty($_POST['uID'])){
+			$e++;
+		} else{
+			$uID = $_POST['uID'];
+		}
+		if($e == 0){
+			try{
+				$q = $con->prepare("DELETE FROM ma_access WHERE userID LIKE (:id)");
+				$q->bindParam(":id", $uID);
+				$q->execute();
+				$q = $con->prepare("DELETE FROM ma_login WHERE userID LIKE (:id)");
+				$q->bindParam(":id", $uID);
+				$q->execute();
+				$o['status'] = "success";
+				$o['msg'] = "Slettede bruger korrekt.";
+			} catch(PDOException $e){
+				error_log($e->getMessage());
+				$o['msg'] = $Content->out(13);
+			}
+		} else{
+			$o['msg'] = $Content->out(11);
+		}
 	} else{
 		$o['msg'] = $Content->out(19);
 	}
