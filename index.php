@@ -2,6 +2,27 @@
 	require $_SERVER["DOCUMENT_ROOT"]."/etc/header.php";
 ?>
 
+<h1><?= $Content->out(10);?></h1>
+
+<p>
+	Klik på en af dem for at blive vist informationer om mails på det domæne.<br/>
+</p>
+
+<ul class="list-unstyled">
+	<?php
+		$q = $con->prepare("SELECT * FROM domain ORDER BY domain ASC");
+		$q->execute();
+		$domains = $q->fetchAll();
+		foreach($domains as $domain){
+			if($Content->access($domain['domain'])){
+	?>
+	<li><a href="/domain/<?= $domain['domain']?>"><?= $domain['domain']?><?php if(!empty($domain['description'])){ echo " (".$domain['description'].")";}?></a></li>
+	<?php
+			}
+		}
+	?>
+</ul>
+
 <?php
 	require $_SERVER["DOCUMENT_ROOT"]."/etc/footer.php";
 ?>

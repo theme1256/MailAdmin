@@ -14,7 +14,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-		<title><?= $site['name'];?></title>
+		<title><?= $Content->siteName();?></title>
 		<meta name="description" content="">
 		<meta name="keywords" content="">
 		<link rel="shortcut icon" type="image/png" href="/favicon.png"/>
@@ -57,7 +57,7 @@
 				var DEVICE = "computer";
 			<?php endif;?>
 
-			function call($url, $data, _success, _fail){
+			function call($url, $data, _success, $target){
 				$.ajax({
 					url: $url,
 					type: 'POST',
@@ -67,10 +67,16 @@
 					if(d.status == "success")
 						_success(d);
 					else
-						_fail(d);
+						statusBox($target, d.msg, d.status);
 				}).fail(function(d){
 					console.log(d);
-					_fail(d);
+					if(d.status == 404)
+						var msg = "<?= $Content->out(7);?>";
+					else if(d.status == 500)
+						var msg = "<?= $Content->out(8);?>";
+					else
+						var msg = "<?= $Content->out(9);?>" + d.status + ", " + d.statusText;
+					statusBox($target, msg, "danger");
 				});
 			}
 
@@ -122,7 +128,9 @@
 			.wrap{ min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -60px; }
 			.footer { height: 60px; background-color: #f5f5f5; }
 			.footer > .container > .text-muted{ margin: 20px 0; }
+			.footer > .container > .text-muted > a > img{ height: 18px; }
 			.push{ height: 60px; }
+			img{ max-width: 100%; }
 		</style>
 	</head>
 	<body>
@@ -141,9 +149,9 @@
 					<div id="navbar" class="collapse navbar-collapse">
 						<ul class="nav navbar-nav">
 							<?php if($Content->access()):?>
-							<li<?= $Content->activePage(["index", "domain"]);?>><a href="/">Domæner</a></li>
-							<li<?= $Content->activePage(["user"]);?>><a href="/user">Ret bruger</a></li>
-							<li><a href="/logout">Log ud</a></li>
+							<li<?= $Content->activePage(["index", "domain"]);?>><a href="/"><?= $Content->out(2);?></a></li>
+							<li<?= $Content->activePage(["user", "admin"]);?>><a href="/user"><?= $Content->out(2);?></a></li>
+							<li><a href="/logout"><?= $Content->out(3);?></a></li>
 							<?php endif;?>
 						</ul>
 					</div>

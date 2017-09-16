@@ -6,9 +6,11 @@
 	*/
 	class Content{
 		private $pdo;
+		private $lang;
 
-		function __construct($pdo){
+		function __construct($pdo, $lang){
 			$this->pdo = $pdo;
+			$this->lang = strtolower($lang);
 		}
 
 		/**
@@ -20,8 +22,39 @@
 		* @return  true / false
 		*
 		*/
-		private function out($id){
-			return false;
+		public function out($id){
+			try{
+				$q = $this->pdo->prepare("SELECT {$this->lang} FROM ma_content WHERE contentID LIKE (:id)");
+				$q->bindParam(":id", $id);
+				$q->execute();
+				$r = $q->fetch(PDO::FETCH_ASSOC);
+				return $r[$this->lang];
+			} catch(PDOException $e){
+				return $e->getMessage();
+			}
+		}
+
+		/**
+		*
+		* Beskrivelse af hvad functionen gør
+		*
+		* @param   array  beskrivelse     #
+		* 
+		* @return  true / false
+		*
+		*/
+		public function siteName(){
+			global $site, $d, $m;
+			$r = $site['name'];
+			if(isset($d)){
+				if(isset($m))
+					$r .= " - " . $m . "@" . $d;
+				else
+					$r .= " - " . $d;
+			} else{
+				$r .= " - " . ucfirst($this->curPageName());
+			}
+			return $r;
 		}
 
 		/**
@@ -36,21 +69,19 @@
 		public function access($d = NULL){
 			if(empty($_SESSION['login'])){
 				return false;
-			}
-			else{
-				$u = $_SESSION['login'];
+			} else{
+				$u = $_SESSION['userID'];
 				if($d != NULL){
 					// Tjekker adgang til de domæne
-					// $q = $this->pdo->prepare("SELECT * FROM con WHERE uID=$u AND $dID=$d");
-					// $q->bindParam(":")
-					// if() > 0){
-					// 	return true;
-					// }
-					// else{
-					// 	return false;
-					// }
-				}
-				else{
+					$q = $this->pdo->prepare("SELECT * FROM ma_access WHERE userID LIKE (:u) AND domain LIKE (:d)");
+					$q->bindParam(":u", $u);
+					$q->bindParam(":d", $d);
+					$q->execute();
+					if($q->rowCount() > 0)
+						return true;
+					else
+						return false;
+				} else{
 					return true;
 				}
 			}
@@ -65,7 +96,7 @@
 		* @return  true / false
 		*
 		*/
-		public function rens($felt){
+		public function clean($felt){
 			$felt = stripslashes($felt);
 			$felt = strip_tags($felt);
 			$felt = addslashes($felt);
@@ -117,10 +148,6 @@
 				$o .= '<div class="'.$class.' alert" role="alert" style="display: none;"></div>';
 			}
 			return $o;
-		}
-
-		public function login(){
-			return ($_SESSION['login'] && isset($_SESSION['tID']));
 		}
 
 		// Password-stuff

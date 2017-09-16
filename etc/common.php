@@ -21,20 +21,21 @@
 		define('DEBUG', false);
 	}
 
+	// Find client language
+	if(!isset($_COOKIE['lang'])){
+		$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+	} else{
+		$lang = $_COOKIE['lang'];
+	}
+	if(!in_array($lang, ['da', 'en']))
+		$lang = "en";
+
 	if(DEBUG)
 		error_log("POST: ".var_export($_POST, true));
 	if(DEBUG)
 		error_log("GET: ".var_export($_GET, true));
 	if(DEBUG)
 		error_log("SESSION: ".var_export($_SESSION, true));
-
-	// Henter variabler fra URL
-	if(!empty($_GET['domain'])){
-		$d = rens($_GET['domain']);
-		if(!empty($_GET['mail'])){
-			$m = rens($_GET['mail']);
-		}
-	}
 
 	// Plugins
 	require_once(__DIR__ . "/plugins/Html2Text/Html2Text.php");
@@ -46,7 +47,16 @@
 
 	// Wrappers
 	require_once(__DIR__ . "/classes/Content.php");
-	$Content = new Content($con);
+	$Content = new Content($con, $lang);
+
+
+	// Henter variabler fra URL
+	if(!empty($_GET['domain'])){
+		$d = $Content->clean($_GET['domain']);
+		if(!empty($_GET['mail'])){
+			$m = $Content->clean($_GET['mail']);
+		}
+	}
 
 
 	// Constants
@@ -55,6 +65,7 @@
 	define('CSS', ASSETS.'css/');
 	define('JS', ASSETS.'js/');
 	define('PLUGINS', ASSETS.'plugins/');
+	define('IMG', ASSETS.'img/');
 	define('SCRIPTS', HOME.'scripts/');
 	define('ROOT', $_SERVER['DOCUMENT_ROOT']);
 	if(!isset($_SESSION['login']))
