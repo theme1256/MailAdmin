@@ -81,6 +81,11 @@
 						return true;
 					else
 						return false;
+				} elseif(strpos($this->curPageName(), "admin")){
+					if($u == 1)
+						return true;
+					else
+						return false;
 				} else{
 					return true;
 				}

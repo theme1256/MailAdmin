@@ -15,11 +15,11 @@
 		<input type="hidden" name="method" value="post">
 		<div class="form-group">
 			<label for="InputEmail"><?= $Content->out(5);?>:</label>
-			<input type="text" class="form-control" id="InputEmail" name="u" value="<?= $U['user'];?>">
+			<input type="text" class="form-control" id="InputEmail" name="u" value="<?= $U['user'];?>" autocomplete="off">
 		</div>
 		<div class="form-group">
 			<label for="InputPassword"><?= $Content->out(6);?>:</label>
-			<input type="password" class="form-control" id="InputPassword" name="p">
+			<input type="password" class="form-control" id="InputPassword" name="p" autocomplete="off">
 		</div>
 		<div class="form-group text-right">
 			<button type="button" class="submit btn btn-primary"><?= $Content->out(17);?></button>
@@ -49,7 +49,7 @@
 	if($_SESSION['userID'] == 1){
 ?>
 <br/>
-<a href="/admin">Ret alle brugere</a>
+<a href="/admin">Ret og opret brugere</a>
 <?php
 	}
 ?>

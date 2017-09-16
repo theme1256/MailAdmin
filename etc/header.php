@@ -131,6 +131,7 @@
 			.footer > .container > .text-muted > a > img{ height: 18px; }
 			.push{ height: 60px; }
 			img{ max-width: 100%; }
+			.TEMPLATE{ display: none; }
 		</style>
 	</head>
 	<body>
@@ -149,7 +150,7 @@
 					<div id="navbar" class="collapse navbar-collapse">
 						<ul class="nav navbar-nav">
 							<?php if($Content->access()):?>
-							<li<?= $Content->activePage(["index", "domain"]);?>><a href="/"><?= $Content->out(2);?></a></li>
+							<li<?= $Content->activePage(["index", "domain"]);?>><a href="/"><?= $Content->out(1);?></a></li>
 							<li<?= $Content->activePage(["user", "admin"]);?>><a href="/user"><?= $Content->out(2);?></a></li>
 							<li><a href="/logout"><?= $Content->out(3);?></a></li>
 							<?php endif;?>
