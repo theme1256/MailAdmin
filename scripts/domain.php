@@ -8,15 +8,34 @@
 	$action = $_POST['action'];
 	$e = 0;
 
-	if($e == 0){
-		try{
-			// 
-		} catch(PDOException $e){
-			error_log($e->getMessage());
-			$o['msg'] = $Content->out(13);
+	if($action == "update-email"){
+		// 
+
+		if($e == 0){
+			try{
+				// 
+			} catch(PDOException $e){
+				error_log($e->getMessage());
+				$o['msg'] = $Content->out(13);
+			}
+		} else{
+			$o['msg'] = $Content->out(11);
+		}
+	} elseif($action == "create-email"){
+		// 
+
+		if($e == 0){
+			try{
+				// 
+			} catch(PDOException $e){
+				error_log($e->getMessage());
+				$o['msg'] = $Content->out(13);
+			}
+		} else{
+			$o['msg'] = $Content->out(11);
 		}
 	} else{
-		$o['msg'] = $Content->out(11);
+		$o['msg'] = $Content->out(19);
 	}
 
 	// Retuner data korrekt
