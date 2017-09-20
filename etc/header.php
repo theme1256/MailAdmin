@@ -21,11 +21,11 @@
 		<!-- Cache Control -->
 		<meta http-equiv="Cache-control" content="public, max-age=86400">
 		<!-- Chrome tab color -->
-		<meta name="theme-color" content="#FF8200" />
+		<meta name="theme-color" content="#12100F" />
 		<!-- Windows Phone -->
-		<meta name="msapplication-navbutton-color" content="#FF8200" />
+		<meta name="msapplication-navbutton-color" content="#12100F" />
 		<!-- iOS Safari -->
-		<meta name="apple-mobile-web-app-status-bar-style" content="#FF8200" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="#12100F" />
 
 		<!-- jQuery -->
 		<!-- <script type="text/javascript" src="<?= JS;?>jquery.1.12.4.min.js?v=1.12.4"></script> -->

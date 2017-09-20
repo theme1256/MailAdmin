@@ -48,7 +48,7 @@
 			$r = $site['name'];
 			if(isset($d)){
 				if(isset($m))
-					$r .= " - " . $m . "@" . $d;
+					$r .= " - " . $m;
 				else
 					$r .= " - " . $d;
 			} else{
