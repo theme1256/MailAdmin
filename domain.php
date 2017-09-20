@@ -79,16 +79,17 @@
 			e.preventDefault();
 			E = 0;
 			var D = {};
-			D.method = "ajax";
+			D.medium = "ajax";
 			D.action = "create-email";
+			D.domain = "<?= $d;?>";
 			D.u = validate("#InputEmail");
 			D.d = $("input[name='d']").val();
 			D.i = 1;
 			D.n = 1;
 			D.dom = "";
 			while(D.i <= D.d){
-				var y = $("select[name=\""+D.i+"\"]").val();
-				if(y > 0){
+				var y = $("input[name=\""+D.i+"\"]").val();
+				if(y.length > 0){
 					if(D.i > D.n)
 						D.dom += ",";
 					D.dom += y;
@@ -147,7 +148,7 @@
 	<input type="hidden" name="action" value="update-email">
 	<div class="form-group">
 		<label for="InputEmail"><?= $Content->out(28);?>:</label>
-		<input type="text" class="form-control" id="InputEmail" name="u" autocomplete="off" value="<?= $m;?>">
+		<input type="text" class="form-control" id="InputEmail" name="u" autocomplete="off" value="<?= str_replace("@".$d, "", $m);?>">
 	</div>
 	<h3><?= $Content->out(29);?>:</h3>
 	<?= $Content->out(30);?><br/><br/>
@@ -165,7 +166,8 @@
 	</div>
 	<div class="form-group text-right">
 		<a type="button" class="MOAR btn btn-info"><?= $Content->out(32);?></a>
-		<button type="button" class="submit btn btn-primary"><?= $Content->out(31);?></button>
+		<button type="button" class="submit btn btn-primary"><?= $Content->out(39);?></button>
+		<button type="button" class="delete btn btn-danger"><?= $Content->out(40);?></button>
 	</div>
 	<?= $Content->statusBox();?>
 </form>
@@ -176,21 +178,41 @@
 
 <script type="text/javascript">
 	$(function(){
+		$(".delete").click(function(e){
+			e.preventDefault();
+			E = 0;
+			var D = {};
+			D.medium = "ajax";
+			D.action = "delete-email";
+			D.original = validate("#original");
+			D.domain = "<?= $d;?>";
+			if(E == 0){
+				call("<?= SCRIPTS;?>domain.php", D, function(d){
+					statusBox(".status", d.msg, d.status);
+					setTimeout(function(){
+						window.location = "/domain/<?= $d;?>";
+					}, 1500);
+				}, ".status");
+			} else{
+				statusBox(".status", "Et felt er tomt.", "danger");
+			}
+		});
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
 			var D = {};
-			D.method = "ajax";
+			D.medium = "ajax";
 			D.action = "update-email";
 			D.original = validate("#original");
+			D.domain = "<?= $d;?>";
 			D.u = validate("#InputEmail");
 			D.d = $("input[name='d']").val();
 			D.i = 1;
 			D.n = 1;
 			D.dom = "";
 			while(D.i <= D.d){
-				var y = $("select[name=\""+D.i+"\"]").val();
-				if(y > 0){
+				var y = $("input[name=\""+D.i+"\"]").val();
+				if(y.length > 0){
 					if(D.i > D.n)
 						D.dom += ",";
 					D.dom += y;
