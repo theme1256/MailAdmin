@@ -15,11 +15,7 @@
 		}
 	}
 
-	if(isset($_COOKIE['debug'])){
-		define('DEBUG', true);
-	} else{
-		define('DEBUG', false);
-	}
+	define("DEBUG", (isset($_COOKIE['debug'])));
 
 	// Find client language
 	if(!isset($_COOKIE['lang'])){
@@ -30,12 +26,11 @@
 	if(!in_array($lang, ['da', 'en']))
 		$lang = "en";
 
-	if(DEBUG)
+	if(DEBUG){
 		error_log("POST: ".var_export($_POST, true));
-	if(DEBUG)
 		error_log("GET: ".var_export($_GET, true));
-	if(DEBUG)
 		error_log("SESSION: ".var_export($_SESSION, true));
+	}
 
 	// Plugins
 	require_once(__DIR__ . "/plugins/Html2Text/Html2Text.php");

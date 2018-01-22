@@ -41,21 +41,9 @@
 		<![endif]-->
 		<!-- Custom JS -->
 		<script type="text/javascript">
-			<?php if(IOS):?>
-				var OS = "ios";
-			<?php elseif(ANDROID):?>
-				var OS = "android";
-			<?php else:?>
-				var OS = "computer";
-			<?php endif;?>
-
-			<?php if(TABLET):?>
-				var DEVICE = "tablet";
-			<?php elseif(MOBILE):?>
-				var DEVICE = "mobile";
-			<?php else:?>
-				var DEVICE = "computer";
-			<?php endif;?>
+			const OS = "<?= (IOS ? "ios" : (ANDROID ? "android" : "computer"))?>";
+			const DEVICE = "<?= (TABLET ? "tablet" : (MOBILE ? "mobile" : "computer"))?>";
+			const DEBUG = <?= (DEBUG ? "true" : "false");?>;
 
 			function call($url, $data, _success, $target){
 				$.ajax({
