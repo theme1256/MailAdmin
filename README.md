@@ -7,6 +7,7 @@ Is an alternative to the iRedAdmin-Pro interface, if all that is needed is contr
 ## Roadmap
 
 - [x] Get aliases and lists working
+- [ ] Add forwards to a local email
 - [ ] Get catch-all working
 - [ ] Set up and modify moderators
 - [ ] Set up piping to an external script
