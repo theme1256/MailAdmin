@@ -33,11 +33,11 @@
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
-			var D = {};
-			D.method = "ajax";
-			D.u = validate("#InputEmail");
-			D.p = validate("#InputPassword");
-			call("<?= SCRIPTS;?>user.php", D, function(d){
+			let Data = {};
+			Data.method = "ajax";
+			Data.u = validate("#InputEmail");
+			Data.p = validate("#InputPassword");
+			call("<?= SCRIPTS;?>user.php", Data, function(d){
 				statusBox(".status", d.msg, d.status);
 				setTimeout("ReLoad()", 1500);
 			}, ".status");

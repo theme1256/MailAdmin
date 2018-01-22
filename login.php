@@ -21,8 +21,8 @@
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
-			var D = {};
-			D.method = "ajax";
+			let D = {};
+			D.medium = "ajax";
 			D.u = validate("#InputEmail");
 			D.p = validate("#InputPassword");
 			call("<?= SCRIPTS;?>login.php", D, function(d){

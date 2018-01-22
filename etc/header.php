@@ -58,24 +58,25 @@
 						statusBox($target, d.msg, d.status);
 				}).fail(function(d){
 					console.log(d);
-					if(d.status == 404)
-						var msg = "<?= $Content->out(7);?>";
-					else if(d.status == 500)
-						var msg = "<?= $Content->out(8);?>";
-					else
-						var msg = "<?= $Content->out(9);?>" + d.status + ", " + d.statusText;
+					if(d.status == 404){
+						const msg = "<?= $Content->out(7);?>";
+					} else if(d.status == 500){
+						const msg = "<?= $Content->out(8);?>";
+					} else{
+						const msg = "<?= $Content->out(9);?>" + d.status + ", " + d.statusText;
+					}
 					statusBox($target, msg, "danger");
 				});
 			}
 
-			var E = 0;
-			function validate(id, p = ".form-group"){
-				var obj = $(id);
-				var p = obj.closest(p);
+			let E = 0;
+			function validate(id, parent = ".form-group"){
+				const obj = $(id);
+				let p = obj.closest(parent);
 				p.removeClass("has-error");
 				p.removeClass("has-warning");
 				p.removeClass("has-success");
-				var val = obj.val();
+				const val = obj.val();
 				if(val == "" || !val || val.length === 0 || val == 0){
 					p.addClass("has-error");
 					E++;
@@ -86,7 +87,7 @@
 				}
 			}
 			function statusBox(id, msg, type){
-				var obj = $(id);
+				let obj = $(id);
 				obj.slideUp();
 				obj.removeClass("alert-success");
 				obj.removeClass("alert-warning");
@@ -98,6 +99,24 @@
 					obj.slideUp(400);
 					obj.html("");
 				}, 8000);
+			}
+			// Konverterer .serializeArray() til et Object som $.ajax (eller call()) kan bruge til noget
+			function objectifyForm(inp){
+				let rObject = {};
+				for(let i = 0; i < inp.length; i++){
+					if(inp[i]['name'].substr(inp[i]['name'].length - 2) == "[]"){
+						const tmp = inp[i]['name'].substr(0, inp[i]['name'].length-2);
+						if(Array.isArray(rObject[tmp])){
+							rObject[tmp].push(inp[i]['value']);
+						} else{
+							rObject[tmp] = [];
+							rObject[tmp].push(inp[i]['value']);
+						}
+					} else{
+						rObject[inp[i]['name']] = inp[i]['value'];
+					}
+				}
+				return rObject;
 			}
 
 			function ReLoad(){
@@ -149,7 +168,7 @@
 			<div class="container" role="main">
 				<?php
 					if(!$Content->access()){
-						// Der er ikke logget ind, vis login
+						// Der er ikke logget ind eller er ikke bruger 1 på admin siden, vis login
 						require $_SERVER["DOCUMENT_ROOT"]."/login.php";
 						die();
 					}
