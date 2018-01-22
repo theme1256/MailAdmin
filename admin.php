@@ -25,6 +25,8 @@
 <?php elseif($_GET['u'] == "new"):?>
 <!-- Form til at oprette ny bruger -->
 
+<a href="/admin" class="">Tilbage til brugeroversigt</a>
+
 <h1>Opret ny bruger</h1>
 
 <form class="admin col-md-8 col-md-offset-2" action="<?= SCRIPTS;?>admin.php" method="post">
@@ -40,10 +42,9 @@
 	</div>
 	<h3>Domæner:</h3>
 	Tomme felter bliver slettet.<br/><br/>
-	<input type="hidden" name="d" value="1"/>
 	<div id="domains">
 		<div class="form-group">
-			<select class="form-control input-sm" name="1">
+			<select class="form-control input-sm" name="dom[]">
 				<option value="0">vælg en</option>
 				<?php
 					$q = $con->prepare("SELECT * FROM domain ORDER BY domain ASC");
@@ -64,7 +65,7 @@
 </form>
 
 <div class="form-group TEMPLATE">
-	<select class="template form-control input-sm" name="">
+	<select class="template form-control input-sm" name="dom[]">
 		<option value="0">vælg en</option>
 			<?php
 				foreach($domains as $domain){
@@ -79,49 +80,27 @@
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
-			var D = {};
-			D.method = "ajax";
-			D.action = "create-user";
-			D.u = validate("#InputEmail");
-			D.p = validate("#InputPassword");
-			D.d = $("input[name='d']").val();
-			D.i = 1;
-			D.n = 1;
-			D.dom = "";
-			while(D.i <= D.d){
-				var y = $("select[name=\""+D.i+"\"]").val();
-				if(y > 0){
-					if(D.i > D.n)
-						D.dom += ",";
-					D.dom += y;
-				}
-				if(D.dom.length == 0)
-					D.n++;
-				D.i++;
-			}
+			let Data = objectifyForm($("form.admin").serializeArray());
+			Data.medium = "ajax";
 			if(E == 0){
-				call("<?= SCRIPTS;?>admin.php", D, function(d){
+				call("<?= SCRIPTS;?>admin.php", Data, function(d){
 					statusBox(".status", d.msg, d.status);
 					setTimeout(function(){
 						window.location = "/admin";
 					}, 1500);
 				}, ".status");
 			} else{
-				statusBox(".status", "Et felt er tomt.", "danger");
+				statusBox(".status", "<?= $Content->out(45);?>", "danger");
 			}
 		});
 
 		// Skal håndtere at der bliver trykket for at få en boks mere frem til at vælge hvad brugeren skal være admin for
 		$(".MOAR").click(function(e){
 			e.preventDefault();
-			var n = $("input[name='d']").val();
-			n++;
 			$(".TEMPLATE").clone().appendTo("#domains");
-			$("#domains .template").attr("name", n);
 			$("#domains .template").slideDown(250);
 			$("#domains .template").removeClass("template");
 			$("#domains .TEMPLATE").removeClass("TEMPLATE");
-			$("input[name='d']").val(n);
 		});
 	});
 </script>
@@ -135,6 +114,8 @@
 	$q->execute();
 	$U = $q->fetch(PDO::FETCH_ASSOC);
 ?>
+
+<a href="/admin" class="">Tilbage til brugeroversigt</a>
 
 <h1>Ret bruger</h1>
 
@@ -158,7 +139,6 @@
 		$q->execute();
 		$i = 1;
 	?>
-	<input type="hidden" name="d" value="<?= $q->rowCount();?>"/>
 	<div id="domains">
 		<?php
 			$selected = $q->fetchAll(PDO::FETCH_ASSOC);
@@ -168,7 +148,7 @@
 			foreach($selected as $line){
 		?>
 		<div class="form-group">
-			<select class="form-control input-sm" name="<?= $i;?>">
+			<select class="form-control input-sm" name="dom[]">
 				<option value="0">vælg en</option>
 				<?php
 					$i++;
@@ -189,7 +169,7 @@
 </form>
 
 <div class="form-group TEMPLATE">
-	<select class="template form-control input-sm" name="">
+	<select class="template form-control input-sm" name="dom[]">
 		<option value="0">vælg en</option>
 			<?php
 				foreach($domains as $domain){
@@ -203,65 +183,43 @@
 	$(function(){
 		$(".delete").click(function(e){
 			E = 0;
-			var D = {};
-			D.method = "ajax";
-			D.action = "delete-user";
-			D.uID = validate("#uID");
+			let Data = {};
+			Data.medium = "ajax";
+			Data.action = "delete-user";
+			Data.uID = validate("#uID");
 			if(E == 0){
-				call("<?= SCRIPTS;?>admin.php", D, function(d){
+				call("<?= SCRIPTS;?>admin.php", Data, function(d){
 					statusBox(".status", d.msg, d.status);
 					setTimeout(function(){
 						window.location = "/admin";
 					}, 1500);
 				}, ".status");
 			} else{
-				statusBox(".status", "ID feltet er tomt.", "danger");
+				statusBox(".status", "<?= $Content->out(46);?>", "danger");
 			}
 		});
 
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
-			var D = {};
-			D.method = "ajax";
-			D.action = "update-user";
-			D.uID = validate("#uID");
-			D.u = validate("#InputEmail");
-			D.p = validate("#InputPassword");
-			D.d = $("input[name='d']").val();
-			D.i = 1;
-			D.n = 1;
-			D.dom = "";
-			while(D.i <= D.d){
-				var y = $("select[name=\""+D.i+"\"]").val();
-				if(y.length > 0){
-					if(D.i > D.n)
-						D.dom += ",";
-					D.dom += y;
-				}
-				if(D.dom.length == 0)
-					D.n++;
-				D.i++;
-			}
+			let Data = objectifyForm($("form.admin").serializeArray());
+			Data.medium = "ajax";
 			if(E == 0){
-				call("<?= SCRIPTS;?>admin.php", D, function(d){
+				call("<?= SCRIPTS;?>admin.php", Data, function(d){
 					statusBox(".status", d.msg, d.status);
 					setTimeout(function(){
 						window.location = "/admin";
 					}, 1500);
 				}, ".status");
 			} else{
-				statusBox(".status", "Et felt er tomt.", "danger");
+				statusBox(".status", "<?= $Content->out(45);?>", "danger");
 			}
 		});
 
 		// Skal håndtere at der bliver trykket for at få en boks mere frem til at vælge hvad brugeren skal være admin for
 		$(".MOAR").click(function(e){
 			e.preventDefault();
-			var n = $("input[name='d']").val();
-			n++;
 			$(".TEMPLATE").clone().appendTo("#domains");
-			$("#domains .template").attr("name", n);
 			$("#domains .template").slideDown(250);
 			$("#domains .template").removeClass("template");
 			$("#domains .TEMPLATE").removeClass("TEMPLATE");
