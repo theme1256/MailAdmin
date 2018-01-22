@@ -109,7 +109,7 @@
 		}
 
 		if($e == 0){
-			if($Content->access($domain)){
+			if($Content->access(explode("@", $original)[1])){
 				try{
 					$q = $con->prepare("DELETE FROM alias WHERE address LIKE (:a)");
 					$q->bindParam(":a", $original);
