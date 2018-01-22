@@ -56,10 +56,10 @@
 	</div>
 	<h3><?= $Content->out(29);?>:</h3>
 	<?= $Content->out(30);?><br/><br/>
-	<input type="hidden" name="d" value="1"/>
+	<input type="hidden" name="d" value="dom[]"/>
 	<div id="targets">
 		<div class="form-group">
-			<input type="text" class="form-control" name="1">
+			<input type="text" class="form-control" name="dom[]">
 		</div>
 	</div>
 	<div class="form-group text-right">
@@ -70,7 +70,7 @@
 </form>
 
 <div class="form-group TEMPLATE">
-	<input type="text" class="form-control template" name="">
+	<input type="text" class="form-control template" name="dom[]">
 </div>
 
 <script type="text/javascript">
@@ -78,45 +78,25 @@
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
-			var D = {};
-			D.medium = "ajax";
-			D.action = "create-email";
-			D.domain = "<?= $d;?>";
-			D.u = validate("#InputEmail");
-			D.d = $("input[name='d']").val();
-			D.i = 1;
-			D.n = 1;
-			D.dom = "";
-			while(D.i <= D.d){
-				var y = $("input[name=\""+D.i+"\"]").val();
-				if(y.length > 0){
-					if(D.i > D.n)
-						D.dom += ",";
-					D.dom += y;
-				}
-				if(D.dom.length == 0)
-					D.n++;
-				D.i++;
-			}
+			let Data = objectifyForm($("form.domain").serializeArray());
+			Data.medium = "ajax";
+			Data.domain = "<?= $d;?>";
 			if(E == 0){
-				call("<?= SCRIPTS;?>domain.php", D, function(d){
+				call("<?= SCRIPTS;?>domain.php", Data, function(d){
 					statusBox(".status", d.msg, d.status);
 					setTimeout(function(){
 						window.location = "/domain/<?= $d;?>";
 					}, 1500);
 				}, ".status");
 			} else{
-				statusBox(".status", "Et felt er tomt.", "danger");
+				statusBox(".status", "<?= $Content->out(35);?>", "danger");
 			}
 		});
 
 		// Skal håndtere at der bliver trykket for at få en boks mere frem til at vælge hvad brugeren skal være admin for
 		$(".MOAR").click(function(e){
 			e.preventDefault();
-			var n = $("input[name='d']").val();
-			n++;
 			$(".TEMPLATE").clone().appendTo("#targets");
-			$("#targets .template").attr("name", n);
 			$("#targets .template").slideDown(250);
 			$("#targets .template").removeClass("template");
 			$("#targets .TEMPLATE").removeClass("TEMPLATE");
@@ -152,13 +132,12 @@
 	</div>
 	<h3><?= $Content->out(29);?>:</h3>
 	<?= $Content->out(30);?><br/><br/>
-	<input type="hidden" name="d" value="<?= $q->rowCount();?>"/>
 	<div id="targets">
 	<?php
 		foreach($mails as $line => $mail){
 	?>
 		<div class="form-group">
-			<input type="text" class="form-control" name="<?= $line+1;?>" value="<?= $mail['forwarding'];?>">
+			<input type="text" class="form-control" name="dom[]" value="<?= $mail['forwarding'];?>">
 		</div>
 	<?php
 		}
@@ -173,7 +152,7 @@
 </form>
 
 <div class="form-group TEMPLATE">
-	<input type="text" class="form-control template" name="">
+	<input type="text" class="form-control template" name="dom[]">
 </div>
 
 <script type="text/javascript">
@@ -181,65 +160,44 @@
 		$(".delete").click(function(e){
 			e.preventDefault();
 			E = 0;
-			var D = {};
-			D.medium = "ajax";
-			D.action = "delete-email";
-			D.original = validate("#original");
-			D.domain = "<?= $d;?>";
+			let Data = {};
+			Data.medium = "ajax";
+			Data.action = "delete-email";
+			Data.original = validate("#original");
+			Data.domain = "<?= $d;?>";
 			if(E == 0){
-				call("<?= SCRIPTS;?>domain.php", D, function(d){
+				call("<?= SCRIPTS;?>domain.php", Data, function(d){
 					statusBox(".status", d.msg, d.status);
 					setTimeout(function(){
 						window.location = "/domain/<?= $d;?>";
 					}, 1500);
 				}, ".status");
 			} else{
-				statusBox(".status", "Et felt er tomt.", "danger");
+				statusBox(".status", "<?= $Content->out(35);?>", "danger");
 			}
 		});
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
-			var D = {};
-			D.medium = "ajax";
-			D.action = "update-email";
-			D.original = validate("#original");
-			D.domain = "<?= $d;?>";
-			D.u = validate("#InputEmail");
-			D.d = $("input[name='d']").val();
-			D.i = 1;
-			D.n = 1;
-			D.dom = "";
-			while(D.i <= D.d){
-				var y = $("input[name=\""+D.i+"\"]").val();
-				if(y.length > 0){
-					if(D.i > D.n)
-						D.dom += ",";
-					D.dom += y;
-				}
-				if(D.dom.length == 0)
-					D.n++;
-				D.i++;
-			}
+			let Data = objectifyForm($("form.domain").serializeArray());
+			Data.medium = "ajax";
+			Data.domain = "<?= $d;?>";
 			if(E == 0){
-				call("<?= SCRIPTS;?>domain.php", D, function(d){
+				call("<?= SCRIPTS;?>domain.php", Data, function(d){
 					statusBox(".status", d.msg, d.status);
 					setTimeout(function(){
 						window.location = "/domain/<?= $d;?>";
 					}, 1500);
 				}, ".status");
 			} else{
-				statusBox(".status", "Et felt er tomt.", "danger");
+				statusBox(".status", "<?= $Content->out(35);?>", "danger");
 			}
 		});
 
 		// Skal håndtere at der bliver trykket for at få en boks mere frem til at vælge hvad brugeren skal være admin for
 		$(".MOAR").click(function(e){
 			e.preventDefault();
-			var n = $("input[name='d']").val();
-			n++;
 			$(".TEMPLATE").clone().appendTo("#targets");
-			$("#targets .template").attr("name", n);
 			$("#targets .template").slideDown(250);
 			$("#targets .template").removeClass("template");
 			$("#targets .TEMPLATE").removeClass("TEMPLATE");
