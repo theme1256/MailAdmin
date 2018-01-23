@@ -21,11 +21,12 @@
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
-			let D = {};
-			D.medium = "ajax";
-			D.u = validate("#InputEmail");
-			D.p = validate("#InputPassword");
-			call("<?= SCRIPTS;?>login.php", D, function(d){
+			let Data = {
+				medium: "ajax",
+				u: validate("#InputEmail"),
+				p: validate("#InputPassword")
+			};
+			call("<?= SCRIPTS;?>login.php", Data, function(d){
 				statusBox(".status", d.msg, d.status);
 				setTimeout("ReLoad()", 1500);
 			}, ".status");

@@ -36,7 +36,7 @@
 				$a = $u . "@" . $domain;
 				try{
 					$con->beginTransaction();
-					$q = $con->prepare("SELECT * FROM forwardings WHERE address LIKE (:a) AND is_forwarding LIKE (1)");
+					$q = $con->prepare("SELECT is_forwarding FROM forwardings WHERE address LIKE (:a) AND is_forwarding LIKE (1)");
 					$q->bindParam(":a", $original);
 					$q->execute();
 					if($q->rowCount() == 1){
@@ -179,15 +179,15 @@
 				$a = $u . "@" . $domain;
 				try{
 					$con->beginTransaction();
-					$q = $con->prepare("SELECT * FROM alias WHERE address LIKE (:a)");
+					$q = $con->prepare("SELECT address FROM alias WHERE address LIKE (:a)");
 					$q->bindParam(":a", $a);
 					$q->execute();
 					$n1 = $q->rowCount();
-					$q = $con->prepare("SELECT * FROM forwardings WHERE address LIKE (:a)");
+					$q = $con->prepare("SELECT address FROM forwardings WHERE address LIKE (:a)");
 					$q->bindParam(":a", $a);
 					$q->execute();
 					$n2 = $q->rowCount();
-					$q = $con->prepare("SELECT * FROM mailbox WHERE username LIKE (:a)");
+					$q = $con->prepare("SELECT address FROM mailbox WHERE username LIKE (:a)");
 					$q->bindParam(":a", $a);
 					$q->execute();
 					$n3 = $q->rowCount();

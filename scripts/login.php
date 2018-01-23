@@ -20,7 +20,7 @@
 
 	if($e == 0){
 		try{
-			$q = $con->prepare("SELECT * FROM ma_login WHERE user LIKE (:u)");
+			$q = $con->prepare("SELECT pass, userID FROM ma_login WHERE user LIKE (:u)");
 			$q->bindParam(":u", $u);
 			$q->execute();
 			if($q->rowCount() > 0){

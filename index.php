@@ -10,13 +10,13 @@
 
 <ul class="list-unstyled">
 	<?php
-		$q = $con->prepare("SELECT * FROM domain ORDER BY domain ASC");
+		$q = $con->prepare("SELECT domain, description FROM domain ORDER BY domain ASC");
 		$q->execute();
 		$domains = $q->fetchAll();
 		foreach($domains as $domain){
 			if($Content->access($domain['domain'])){
 	?>
-	<li><a href="/domain/<?= $domain['domain']?>"><?= $domain['domain']?><?php if(!empty($domain['description'])){ echo " (".$domain['description'].")";}?></a></li>
+	<li><a href="/domain/<?= $domain['domain']?>"><?= $domain['domain']?> <?= "(".$domain['description'].")";?></a></li>
 	<?php
 			}
 		}

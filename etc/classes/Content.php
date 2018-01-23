@@ -1,48 +1,53 @@
 <?php
 	/**
-	*
-	* Beskrivelse af hvad classen skal kunne
-	*
-	*/
+	 *
+	 * Handles all the repetitive actions that has to do with the userinterface or content on the site
+	 *
+	 * @param 	PDO 	A connection to the vmail table in the database
+	 * @param 	String 	The 2-letter language selection
+	 * 
+	 */
 	class Content{
 		private $pdo;
 		private $lang;
 
-		function __construct($pdo, $lang){
+		function __construct(PDO $pdo, String $lang){
 			$this->pdo = $pdo;
 			$this->lang = strtolower($lang);
 		}
 
 		/**
-		*
-		* Beskrivelse af hvad functionen gør
-		*
-		* @param   array  beskrivelse     #
-		* 
-		* @return  true / false
-		*
-		*/
-		public function out($id){
+		 *
+		 * Returns a text from the database
+		 *
+		 * @param 	int 	ID on the line from the table, that is to be returned
+		 * @param 	String 	Optional, if the selected language is not to be used
+		 * 
+		 * @return 	String 	The text or the message from the PDOException, if one is thrown
+		 *
+		 */
+		public function out(int $id, String $lang = null){
+			if(is_null($lang))
+				$lang = $this->lang;
 			try{
-				$q = $this->pdo->prepare("SELECT {$this->lang} FROM ma_content WHERE contentID LIKE (:id)");
+				$q = $this->pdo->prepare("SELECT {$lang} FROM ma_content WHERE contentID LIKE (:id)");
 				$q->bindParam(":id", $id);
 				$q->execute();
 				$r = $q->fetch(PDO::FETCH_ASSOC);
-				return $r[$this->lang];
+				return $r[$lang];
 			} catch(PDOException $e){
 				return $e->getMessage();
 			}
 		}
 
 		/**
-		*
-		* Beskrivelse af hvad functionen gør
-		*
-		* @param   array  beskrivelse     #
-		* 
-		* @return  true / false
-		*
-		*/
+		 *
+		 * Returns the name of the site.
+		 * Is used for the <title> tag
+		 *
+		 * @return 	String 	The site name
+		 *
+		 */
 		public function siteName(){
 			global $site, $d, $m;
 			$r = $site['name'];
@@ -58,22 +63,22 @@
 		}
 
 		/**
-		*
-		* Tjekker om folk er logget ind og om de har adgang til det givne domæne
-		*
-		* @param   array  beskrivelse     #
-		* 
-		* @return  true / false
-		*
-		*/
-		public function access($d = NULL){
+		 *
+		 * Checks if a user is logged in and if it has access to the current site
+		 *
+		 * @param 	String 	A domain, if none is givenm it checks if site is "admin", after checking login status
+		 * 
+		 * @return 	Bool 	Whether or not the user has access
+		 *
+		 */
+		public function access(String $d = NULL){
 			if(empty($_SESSION['login'])){
 				return false;
 			} else{
 				$u = $_SESSION['userID'];
 				if($d != NULL){
 					// Tjekker adgang til de domæne
-					$q = $this->pdo->prepare("SELECT * FROM ma_access WHERE userID LIKE (:u) AND domain LIKE (:d)");
+					$q = $this->pdo->prepare("SELECT userID FROM ma_access WHERE userID LIKE (:u) AND domain LIKE (:d)");
 					$q->bindParam(":u", $u);
 					$q->bindParam(":d", $d);
 					$q->execute();
@@ -93,21 +98,28 @@
 		}
 
 		/**
-		*
-		* Beskrivelse af hvad functionen gør
-		*
-		* @param   array  beskrivelse     #
-		* 
-		* @return  true / false
-		*
-		*/
-		public function clean($felt){
+		 *
+		 * Cleans a string for use, if the intentions could be mallicious
+		 *
+		 * @param 	String
+		 * 
+		 * @return 	String
+		 *
+		 */
+		public function clean(String $felt){
 			$felt = stripslashes($felt);
 			$felt = strip_tags($felt);
 			$felt = addslashes($felt);
 			return $felt;
 		}
 
+		/**
+		 *
+		 * Returns the current url, without the .php at the end
+		 *
+		 * @return 	String
+		 *
+		 */
 		public function curPageName(){
 			$url = $_SERVER["SCRIPT_NAME"];
 			if(DEBUG)
@@ -122,6 +134,15 @@
 			return $url;
 		}
 
+		/**
+		 *
+		 * Returns " class=\"active\"" if the current page is in the given array or equals the given string
+		 *
+		 * @param 	String or Array
+		 * 
+		 * @return 	String
+		 *
+		 */
 		public function activePage($page){
 			if(is_array($page)){
 				if(in_array($this->curPageName(), $page))
@@ -131,6 +152,16 @@
 					return " class=\"active\"";
 			}
 		}
+
+		/**
+		 *
+		 * Returns " active" if the current page is in the given array or equals the given string
+		 *
+		 * @param 	String or Array
+		 * 
+		 * @return 	String
+		 *
+		 */
 		public function activeMenu($page){
 			if(is_array($page)){
 				if(in_array($this->curPageName(), $page))
@@ -141,7 +172,16 @@
 			}
 		}
 
-		public function statusBox($class = "status"){
+		/**
+		 *
+		 * Returns a bootstrap 3.3.7 statusbox, with content if content is found in the _SESSION
+		 *
+		 * @param 	String 	Optional, a class the box should have, default "status"
+		 * 
+		 * @return 	String 	The statusbox
+		 *
+		 */
+		public function statusBox(String $class = "status"){
 			$o = "";
 			if(isset($_SESSION['status'])){
 				$o .= '<div class="alert alert-'.$_SESSION['msg'].'" role="alert">';
@@ -155,8 +195,16 @@
 			return $o;
 		}
 
-		// Password-stuff
-		public function hash($p){
+		/**
+		 *
+		 * Blowfish hashes a string
+		 *
+		 * @param 	String 	The string to be hashed
+		 * 
+		 * @return 	String 	The hashed string
+		 *
+		 */
+		public function hash(String $p){
 			$cost = 10;
 			$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
 			$salt = sprintf("$2a$%02d$", $cost) . $salt;

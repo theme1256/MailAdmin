@@ -18,11 +18,10 @@
 	define("DEBUG", (isset($_COOKIE['debug'])));
 
 	// Find client language
-	if(!isset($_COOKIE['lang'])){
+	if(!isset($_COOKIE['lang']))
 		$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-	} else{
+	else
 		$lang = $_COOKIE['lang'];
-	}
 	if(!in_array($lang, ['da', 'en']))
 		$lang = "en";
 
@@ -33,15 +32,15 @@
 	}
 
 	// Plugins
-	require_once(__DIR__ . "/plugins/Html2Text/Html2Text.php");
-	require_once(__DIR__ . "/plugins/Mobile-Detect-2.8.24/Mobile_Detect.php");
-	require_once(__DIR__ . "/plugins/PHPMailer/PHPMailerAutoload.php");
+	require_once __DIR__ . "/plugins/Html2Text/Html2Text.php";
+	require_once __DIR__ . "/plugins/Mobile-Detect-2.8.24/Mobile_Detect.php";
+	require_once __DIR__ . "/plugins/PHPMailer/PHPMailerAutoload.php";
 
 	// Wrappers
-	require_once(__DIR__ . "/wrappers/email.php");
+	require_once __DIR__ . "/wrappers/email.php";
 
 	// Wrappers
-	require_once(__DIR__ . "/classes/Content.php");
+	require_once __DIR__ . "/classes/Content.php";
 	$Content = new Content($con, $lang);
 
 

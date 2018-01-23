@@ -1,6 +1,9 @@
 <?php
+	require_once __DIR__ . "/../plugins/PHPMailer/PHPMailerAutoload.php";
+	require_once __DIR__ . "/../plugins/Html2Text/Html2Text.php";
+
 	function email($to, $content, $subject, $auth, $from = "Mr. Server"){
-		// Sætter SMTP op
+		// SMTP setup
 		$mail = new PHPMailer();
 		$html = new \Html2Text\Html2Text($content);
 		$mail->IsSMTP();
@@ -18,7 +21,7 @@
 			)
 		);
 		// $mail->SMTPDebug = 2;
-		// Diverse mailting
+		// Setup of to, from, subject, etc.
 		$mail->From = $auth[0];
 		$mail->FromName = $from;
 		$mail->addAddress($to);
@@ -27,7 +30,7 @@
 		$mail->MsgHTML($content);
 		$mail->isHTML(true);
 		$mail->CharSet = 'UTF-8';
-		// Sender beskeden og gemmer svaret i session
+		// Tries to send and returns true/false
 		if(!$mail->Send()) {
 			return false;
 		} else {

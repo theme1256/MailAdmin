@@ -2,7 +2,7 @@
 	require $_SERVER["DOCUMENT_ROOT"]."/etc/header.php";
 
 	$uID = $_SESSION['userID'];
-	$q = $con->prepare("SELECT * FROM ma_login WHERE userID LIKE (:uID)");
+	$q = $con->prepare("SELECT user FROM ma_login WHERE userID LIKE (:uID)");
 	$q->bindParam(":uID", $uID);
 	$q->execute();
 	$U = $q->fetch(PDO::FETCH_ASSOC);
@@ -33,10 +33,11 @@
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
-			let Data = {};
-			Data.method = "ajax";
-			Data.u = validate("#InputEmail");
-			Data.p = validate("#InputPassword");
+			let Data = {
+				medium: "ajax",
+				u: validate("#InputEmail"),
+				p: validate("#InputPassword")
+			};
 			call("<?= SCRIPTS;?>user.php", Data, function(d){
 				statusBox(".status", d.msg, d.status);
 				setTimeout("ReLoad()", 1500);

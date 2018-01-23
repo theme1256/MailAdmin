@@ -9,7 +9,7 @@
 
 <ul class="list-unstyled">
 	<?php
-		$q = $con->prepare("SELECT * FROM ma_login ORDER BY user ASC");
+		$q = $con->prepare("SELECT user FROM ma_login ORDER BY user ASC");
 		$q->execute();
 		$users = $q->fetchAll(PDO::FETCH_ASSOC);
 		foreach($users as $user){
@@ -47,7 +47,7 @@
 			<select class="form-control input-sm" name="dom[]">
 				<option value="0">vælg en</option>
 				<?php
-					$q = $con->prepare("SELECT * FROM domain ORDER BY domain ASC");
+					$q = $con->prepare("SELECT domain FROM domain ORDER BY domain ASC");
 					$q->execute();
 					$domains = $q->fetchAll(PDO::FETCH_ASSOC);
 					foreach($domains as $domain){
@@ -109,7 +109,7 @@
 <!-- Ret brugeren -->
 <?php
 	$u = $_GET['u'];
-	$q = $con->prepare("SELECT * FROM ma_login WHERE user LIKE (:u)");
+	$q = $con->prepare("SELECT userID, user FROM ma_login WHERE user LIKE (:u)");
 	$q->bindParam(":u", $u);
 	$q->execute();
 	$U = $q->fetch(PDO::FETCH_ASSOC);
@@ -134,15 +134,14 @@
 	<h3>Domæner:</h3>
 	Tomme felter bliver slettet.<br/><br/>
 	<?php
-		$q = $con->prepare("SELECT * FROM ma_access INNER JOIN domain ON domain.domain=ma_access.domain WHERE userID LIKE (:uID) ORDER BY domain.domain ASC");
+		$q = $con->prepare("SELECT domain FROM ma_access INNER JOIN domain ON domain.domain=ma_access.domain WHERE userID LIKE (:uID) ORDER BY domain.domain ASC");
 		$q->bindParam(":uID", $U['userID']);
 		$q->execute();
-		$i = 1;
 	?>
 	<div id="domains">
 		<?php
 			$selected = $q->fetchAll(PDO::FETCH_ASSOC);
-			$q = $con->prepare("SELECT * FROM domain ORDER BY domain ASC");
+			$q = $con->prepare("SELECT domain FROM domain ORDER BY domain ASC");
 			$q->execute();
 			$domains = $q->fetchAll(PDO::FETCH_ASSOC);
 			foreach($selected as $line){
@@ -151,7 +150,6 @@
 			<select class="form-control input-sm" name="dom[]">
 				<option value="0">vælg en</option>
 				<?php
-					$i++;
 					foreach($domains as $domain){
 				?>
 				<option value="<?= $domain['domain'];?>"<?php if($domain['domain'] == $line['domain']){ echo " selected=\"selected\"";}?>><?= $domain['domain'];?></option>

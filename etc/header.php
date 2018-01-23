@@ -1,6 +1,7 @@
 <?php
 	require_once(__DIR__ . "/common.php");
 
+	// SEO optimization, just because
 	if(CHROME)
 		$css_rule = 'rel="preload" as="style" onload="this.rel=\'stylesheet\'"';
 	else
@@ -168,7 +169,7 @@
 			<div class="container" role="main">
 				<?php
 					if(!$Content->access()){
-						// Der er ikke logget ind eller er ikke bruger 1 på admin siden, vis login
+						// Not logged in or not user 1 on admin site, show login
 						require $_SERVER["DOCUMENT_ROOT"]."/login.php";
 						die();
 					}
