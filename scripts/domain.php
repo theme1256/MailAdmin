@@ -36,30 +36,13 @@
 				$a = $u . "@" . $domain;
 				try{
 					$con->beginTransaction();
-					$q = $con->prepare("DELETE FROM forwardings WHERE address LIKE (:a)");
+					$q = $con->prepare("SELECT * FROM forwardings WHERE address LIKE (:a) AND is_forwarding LIKE (1)");
 					$q->bindParam(":a", $original);
 					$q->execute();
-					if(sizeof($input) == 1 && !empty($input[0])){
-						if(!filter_var($input[0], FILTER_VALIDATE_EMAIL)){
-							$o['msg'] = $Content->out(36);
-							$fail = true;
-						} else{
-							$tmp = explode("@", $input[0]);
-							if($domain == $tmp[1]){ // Hvis domænet er det samme, opret som et alias
-								$alias = true;
-								$q = $con->prepare("INSERT INTO forwardings (address, forwarding, domain, is_alias) VALUES (:a, :f, :d, 1)");
-							} else{
-								$alias = false;
-								$q = $con->prepare("INSERT INTO forwardings (address, forwarding, domain, is_list) VALUES (:a, :f, :d, 1)");
-							}
-							$q->bindParam(":a", $a);
-							$q->bindParam(":f", $input[0]);
-							$q->bindParam(":d", $domain);
-							$q->execute();
-						}
-						$counter = 1;
-					} else{
-						$alias = false;
+					if($q->rowCount() == 1){
+						$q = $con->prepare("DELETE FROM forwardings WHERE address LIKE (:a) AND is_forwarding LIKE (0)");
+						$q->bindParam(":a", $original);
+						$q->execute();
 						$q = $con->prepare("INSERT INTO forwardings (address, forwarding, domain, is_list) VALUES (:a, :f, :d, 1)");
 						$counter = 0;
 						foreach($input as $mail){
@@ -71,24 +54,68 @@
 								$q->execute();
 							}
 						}
-					}
-					if(!$alias){
-						if($original != $a){ // Aliaset i "alias" skal opdateres
-							$q = $con->prepare("UPDATE alias SET address = :a, modified = NOW() WHERE address LIKE (:o)");
-							$q->bindParam(":a", $a);
-							$q->bindParam(":o", $original);
-							$q->execute();
-						}
-						$o['msg'] = $Content->out(42);
-					} elseif($alias && !$fail){
-						$o['msg'] = $Content->out(41);
-					}
-					if($counter == 0){
-						$o['msg'] = $Content->out(48);
-						$con->rollback();
-					} else{
 						$con->commit();
 						$o['status'] = "success";
+						if($counter == 0){
+							$o['msg'] = $Content->out(53);
+						} else{
+							$o['msg'] = $Content->out(54);
+						}
+					} else{
+						$q = $con->prepare("DELETE FROM forwardings WHERE address LIKE (:a)");
+						$q->bindParam(":a", $original);
+						$q->execute();
+						if(sizeof($input) == 1 && !empty($input[0])){
+							if(!filter_var($input[0], FILTER_VALIDATE_EMAIL)){
+								$o['msg'] = $Content->out(36);
+								$fail = true;
+							} else{
+								$tmp = explode("@", $input[0]);
+								if($domain == $tmp[1]){ // Hvis domænet er det samme, opret som et alias
+									$alias = true;
+									$q = $con->prepare("INSERT INTO forwardings (address, forwarding, domain, is_alias) VALUES (:a, :f, :d, 1)");
+								} else{
+									$alias = false;
+									$q = $con->prepare("INSERT INTO forwardings (address, forwarding, domain, is_list) VALUES (:a, :f, :d, 1)");
+								}
+								$q->bindParam(":a", $a);
+								$q->bindParam(":f", $input[0]);
+								$q->bindParam(":d", $domain);
+								$q->execute();
+							}
+							$counter = 1;
+						} else{
+							$alias = false;
+							$q = $con->prepare("INSERT INTO forwardings (address, forwarding, domain, is_list) VALUES (:a, :f, :d, 1)");
+							$counter = 0;
+							foreach($input as $mail){
+								if(!empty($mail)){
+									$counter++;
+									$q->bindParam(":a", $a);
+									$q->bindParam(":f", $mail);
+									$q->bindParam(":d", $domain);
+									$q->execute();
+								}
+							}
+						}
+						if(!$alias){
+							if($original != $a){ // Aliaset i "alias" skal opdateres
+								$q = $con->prepare("UPDATE alias SET address = :a, modified = NOW() WHERE address LIKE (:o)");
+								$q->bindParam(":a", $a);
+								$q->bindParam(":o", $original);
+								$q->execute();
+							}
+							$o['msg'] = $Content->out(42);
+						} elseif($alias && !$fail){
+							$o['msg'] = $Content->out(41);
+						}
+						if($counter == 0){
+							$o['msg'] = $Content->out(48);
+							$con->rollback();
+						} else{
+							$con->commit();
+							$o['status'] = "success";
+						}
 					}
 				} catch(PDOException $e){
 					error_log($e->getMessage());

@@ -15,7 +15,7 @@
 
 <ul class="list-unstyled">
 	<?php
-		$q = $con->prepare("SELECT * FROM forwardings WHERE domain LIKE (:d) GROUP BY address ORDER BY address ASC");
+		$q = $con->prepare("SELECT is_list, is_alias, is_forwarding, address, COUNT(*) AS antal FROM forwardings WHERE domain LIKE (:d) GROUP BY address ORDER BY address ASC");
 		$q->bindParam(":d", $d);
 		$q->execute();
 		$mails = $q->fetchAll(PDO::FETCH_ASSOC);
@@ -28,7 +28,19 @@
 				$type = $Content->out(25);
 			}
 	?>
-	<li><?php if($mail['is_forwarding'] == 0){?><a href="/domain/<?= $d.'/'.$mail['address'];?>"><?php }?><?= $mail['address']?> (<?= $type;?>)<?php if($mail['is_forwarding'] == 0){?></a><?php }?></li>
+	<li>
+		<?php if($mail['is_forwarding'] == 0){?>
+		<a href="/domain/<?= $d.'/'.$mail['address'];?>"><?= $mail['address']?> (<?= $type;?>)</a>
+		<?php } elseif($mail['is_forwarding'] == 1){?>
+		<?= $mail['address']?> (<?= $type;?>) <a href="/domain/<?= $d.'/'.$mail['address'];?>">
+			<?php if($mail['antal'] > 1){?>
+				<?= $Content->out(51);?>
+			<?php } else{?>
+				<?= $Content->out(50);?>
+			<?php }?>
+		</a>
+		<?php }?>
+	</li>
 	<?php
 		}
 	?>
@@ -108,7 +120,7 @@
 <?php else:?>
 <!-- Ret emailen -->
 <?php
-	$q = $con->prepare("SELECT * FROM forwardings WHERE address LIKE (:a)");
+	$q = $con->prepare("SELECT is_list, is_alias, is_forwarding, address, forwarding FROM forwardings WHERE address LIKE (:a)");
 	$q->bindParam(":a", $m);
 	$q->execute();
 	$mails = $q->fetchAll(PDO::FETCH_ASSOC);
@@ -116,7 +128,11 @@
 
 <a href="/domain/<?= $d;?>" class=""><?= $Content->out(33);?></a>
 
+<?php if($mails[0]['is_forwarding'] == 1):?>
+<h1><?= $Content->out(52);?> <?= $d;?></h1>
+<?php else:?>
 <h1><?= $Content->out(24);?> <?= $d;?></h1>
+<?php endif;?>
 
 <p>
 	<br/>
@@ -137,7 +153,7 @@
 		foreach($mails as $line => $mail){
 	?>
 		<div class="form-group">
-			<input type="text" class="form-control" name="dom[]" value="<?= $mail['forwarding'];?>">
+			<input type="text" class="form-control" name="dom[]" value="<?= $mail['forwarding'];?>"<?= ($mail['forwarding'] == $m ? "disabled title='".$Content->out(49)."'" : "");?>>
 		</div>
 	<?php
 		}
@@ -146,7 +162,9 @@
 	<div class="form-group text-right">
 		<a type="button" class="MOAR btn btn-info"><?= $Content->out(32);?></a>
 		<button type="button" class="submit btn btn-primary"><?= $Content->out(39);?></button>
+		<?php if($mails[0]['is_forwarding'] == 0):?>
 		<button type="button" class="delete btn btn-danger"><?= $Content->out(40);?></button>
+		<?php endif;?>
 	</div>
 	<?= $Content->statusBox();?>
 </form>
@@ -157,6 +175,7 @@
 
 <script type="text/javascript">
 	$(function(){
+		<?php if($mails[0]['is_forwarding'] == 0):?>
 		$(".delete").click(function(e){
 			e.preventDefault();
 			E = 0;
@@ -176,6 +195,7 @@
 				statusBox(".status", "<?= $Content->out(35);?>", "danger");
 			}
 		});
+		<?php endif;?>
 		$(".submit").click(function(e){
 			e.preventDefault();
 			E = 0;
