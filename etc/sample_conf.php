@@ -1,7 +1,7 @@
 <?php
 	// Database stuff
 	$db['host'] = "localhost";
-	$db['name'] = "";
+	$db['name'] = "vmail";
 	$db['username'] = "";
 	$db['password'] = "";
 
