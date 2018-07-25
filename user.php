@@ -1,9 +1,8 @@
 <?php
-	require $_SERVER["DOCUMENT_ROOT"]."/etc/header.php";
+	require_once $_SERVER["DOCUMENT_ROOT"]."/etc/header.php";
 
-	$uID = $_SESSION['userID'];
 	$q = $con->prepare("SELECT user FROM ma_login WHERE userID LIKE (:uID)");
-	$q->bindParam(":uID", $uID);
+	$q->bindParam(":uID", $_SESSION['userID']);
 	$q->execute();
 	$U = $q->fetch(PDO::FETCH_ASSOC);
 ?>
@@ -47,14 +46,14 @@
 </script>
 
 <?php
-	if($_SESSION['userID'] == 1){
+	if($_SESSION['userID'] == 1):
 ?>
 <br/>
-<a href="/admin">Ret og opret brugere</a>
+<a href="<?= HOME;?>admin"><?= $Content->out(55);?></a>
 <?php
-	}
+	endif;
 ?>
 
 <?php
-	require $_SERVER["DOCUMENT_ROOT"]."/etc/footer.php";
+	include $_SERVER["DOCUMENT_ROOT"]."/etc/footer.php";
 ?>

@@ -43,10 +43,10 @@
 					if($ds > 0){
 						$con->commit();
 						$o['status'] = "success";
-						$o['msg'] = "Oprettede bruger korrekt.";
+						$o['msg'] = $Content->out(68);
 					} else{
 						$con->rollback();
-						$o['msg'] = "Der var ikke nogen domæner";
+						$o['msg'] = $Content->out(69);
 					}
 				} catch(PDOException $e){
 					error_log($e->getMessage());
@@ -100,10 +100,10 @@
 					if($ds > 0){
 						$con->commit();
 						$o['status'] = "success";
-						$o['msg'] = "Opdaterede bruger korrekt.";
+						$o['msg'] = $Content->out(70);
 					} else{
 						$con->rollback();
-						$o['msg'] = "Der var ikke nogen domæner";
+						$o['msg'] = $Content->out(69);
 					}
 				} catch(PDOException $e){
 					$con->rollback();
@@ -132,7 +132,7 @@
 					$q->bindParam(":id", $uID);
 					$q->execute();
 					$o['status'] = "success";
-					$o['msg'] = "Slettede bruger korrekt.";
+					$o['msg'] = $Content->out(71);
 				} catch(PDOException $e){
 					error_log($e->getMessage());
 					$o['msg'] = $Content->out(13);

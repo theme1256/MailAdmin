@@ -35,5 +35,5 @@
 </script>
 
 <?php
-	require __DIR__ . "/etc/footer.php";
+	include __DIR__ . "/etc/footer.php";
 ?>

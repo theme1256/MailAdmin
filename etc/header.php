@@ -46,7 +46,7 @@
 			const DEVICE = "<?= (TABLET ? "tablet" : (MOBILE ? "mobile" : "computer"))?>";
 			const DEBUG = <?= (DEBUG ? "true" : "false");?>;
 
-			function call($url, $data, _success, $target){
+			let call = function($url, $data, _success, $target){
 				$.ajax({
 					url: $url,
 					type: 'POST',
@@ -71,7 +71,7 @@
 			}
 
 			let E = 0;
-			function validate(id, parent = ".form-group"){
+			let validate = function(id, parent = ".form-group"){
 				const obj = $(id);
 				let p = obj.closest(parent);
 				p.removeClass("has-error");
@@ -87,7 +87,7 @@
 					return val;
 				}
 			}
-			function statusBox(id, msg, type){
+			let statusBox = function(id, msg, type){
 				let obj = $(id);
 				obj.slideUp();
 				obj.removeClass("alert-success");
@@ -102,7 +102,7 @@
 				}, 8000);
 			}
 			// Konverterer .serializeArray() til et Object som $.ajax (eller call()) kan bruge til noget
-			function objectifyForm(inp){
+			let objectifyForm = function(inp){
 				let rObject = {};
 				for(let i = 0; i < inp.length; i++){
 					if(inp[i]['name'].substr(inp[i]['name'].length - 2) == "[]"){
@@ -120,15 +120,15 @@
 				return rObject;
 			}
 
-			function ReLoad(){
-				window.location = '<?= $_SERVER['REQUEST_URI'];?>';
+			let ReLoad = function(){
+				location.reload();
 			}
 		</script>
 		<!-- Bootstrap -->
-		<link <?php echo $css_rule;?> href="<?= CSS;?>bootstrap.min.css?v=3.3.7"/>
+		<link <?= $css_rule;?> href="<?= CSS;?>bootstrap.min.css?v=3.3.7"/>
 		<script async type="text/javascript" src="<?= JS;?>bootstrap.min.js?v=3.3.7"></script>
 		<!-- FontAwesome -->
-		<link <?php echo $css_rule;?> href="<?= CSS;?>font-awesome.min.css?v=4.7.0">
+		<link <?= $css_rule;?> href="<?= CSS;?>font-awesome.min.css?v=4.7.0">
 		<!-- Custom CSS -->
 		<style type="text/css">
 			html, body{ height: 100%; }

@@ -1,11 +1,11 @@
 <?php
-	require $_SERVER["DOCUMENT_ROOT"]."/etc/header.php";
+	require_once $_SERVER["DOCUMENT_ROOT"]."/etc/header.php";
 ?>
 
 <?php if(empty($_GET['mail'])):?>
 <!-- Oversigt over domænet -->
 
-<a href="/" class=""><?= $Content->out(34);?></a>
+<a href="<?= HOME;?>" class=""><?= $Content->out(34);?></a>
 
 <h1><?= $Content->out(21);?> <?= $d;?></h1>
 
@@ -18,8 +18,7 @@
 		$q = $con->prepare("SELECT is_list, is_alias, is_forwarding, address, COUNT(*) AS antal FROM forwardings WHERE domain LIKE (:d) GROUP BY address ORDER BY address ASC");
 		$q->bindParam(":d", $d);
 		$q->execute();
-		$mails = $q->fetchAll(PDO::FETCH_ASSOC);
-		foreach($mails as $mail){
+		foreach($q->fetchAll(PDO::FETCH_ASSOC) as $mail){
 			if($mail['is_list'] == 1){
 				$type = $Content->out(27);
 			} elseif($mail['is_alias'] == 1){
@@ -30,9 +29,9 @@
 	?>
 	<li>
 		<?php if($mail['is_forwarding'] == 0){?>
-		<a href="/domain/<?= $d.'/'.$mail['address'];?>"><?= $mail['address']?> (<?= $type;?>)</a>
+		<a href="<?= HOME;?>domain/<?= $d.'/'.$mail['address'];?>"><?= $mail['address']?> (<?= $type;?>)</a>
 		<?php } elseif($mail['is_forwarding'] == 1){?>
-		<?= $mail['address']?> (<?= $type;?>) <a href="/domain/<?= $d.'/'.$mail['address'];?>">
+		<?= $mail['address']?> (<?= $type;?>) <a href="<?= HOME;?>domain/<?= $d.'/'.$mail['address'];?>">
 			<?php if($mail['antal'] > 1){?>
 				<?= $Content->out(51);?>
 			<?php } else{?>
@@ -45,13 +44,13 @@
 		}
 	?>
 	<li>&nbsp;</li>
-	<li><a href="/domain/<?= $d;?>/new"><?= $Content->out(22);?></a></li>
+	<li><a href="<?= HOME;?>domain/<?= $d;?>/new"><?= $Content->out(22);?></a></li>
 </ul>
 
 <?php elseif($m == "new"):?>
 <!-- Opret ny -->
 
-<a href="/domain/<?= $d;?>" class=""><?= $Content->out(33);?></a>
+<a href="<?= HOME;?>domain/<?= $d;?>" class=""><?= $Content->out(33);?></a>
 
 <h1><?= $Content->out(23);?> <?= $d;?></h1>
 
@@ -126,7 +125,7 @@
 	$mails = $q->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<a href="/domain/<?= $d;?>" class=""><?= $Content->out(33);?></a>
+<a href="<?= HOME;?>domain/<?= $d;?>" class=""><?= $Content->out(33);?></a>
 
 <?php if($mails[0]['is_forwarding'] == 1):?>
 <h1><?= $Content->out(52);?> <?= $d;?></h1>
@@ -229,5 +228,5 @@
 <?php endif;?>
 
 <?php
-	require $_SERVER["DOCUMENT_ROOT"]."/etc/footer.php";
+	include $_SERVER["DOCUMENT_ROOT"]."/etc/footer.php";
 ?>
