@@ -187,7 +187,7 @@
 					$q->bindParam(":a", $a);
 					$q->execute();
 					$n2 = $q->rowCount();
-					$q = $con->prepare("SELECT address FROM mailbox WHERE username LIKE (:a)");
+					$q = $con->prepare("SELECT username FROM mailbox WHERE username LIKE (:a)");
 					$q->bindParam(":a", $a);
 					$q->execute();
 					$n3 = $q->rowCount();
