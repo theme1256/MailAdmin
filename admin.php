@@ -134,7 +134,7 @@
 	<h3><?= $Content->out(58);?>:</h3>
 	<?= $Content->out(59);?><br/><br/>
 	<?php
-		$q = $con->prepare("SELECT domain FROM ma_access INNER JOIN domain ON domain.domain=ma_access.domain WHERE userID LIKE (:uID) ORDER BY domain.domain ASC");
+		$q = $con->prepare("SELECT domain.domain FROM ma_access INNER JOIN domain ON domain.domain=ma_access.domain WHERE userID LIKE (:uID) ORDER BY domain.domain ASC");
 		$q->bindParam(":uID", $U['userID']);
 		$q->execute();
 	?>
@@ -161,7 +161,7 @@
 	<div class="form-group text-right">
 		<a type="button" class="MOAR btn btn-info"><?= $Content->out(61);?></a>
 		<button type="button" class="submit btn btn-primary"><?= $Content->out(62);?></button>
-		<button type="button" class="delete btn btn-danger"><?= $Content->out(60);?></button>
+		<button type="button" class="delete btn btn-danger"><?= $Content->out(63);?></button>
 	</div>
 	<?= $Content->statusBox();?>
 </form>
